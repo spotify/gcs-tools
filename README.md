@@ -14,7 +14,15 @@ more info at the end.
 
 Examples below show usage of `tojson` command, but it can be any of the `avro-tools` commands (`cat`,`help`,`totext`, ...).
 
-### Assembly:
+### Fetch prepacked jar
+
+Fetch prebuild jar from [releases](https://github.com/ravwojdyla/avro-z/releases).
+
+```
+java -jar <jar>
+```
+
+### Assembly your own jar:
 
 ```
 sbt assembly
