@@ -42,7 +42,7 @@ core-site.xml
 ## How it works:
 
 To make avro-tools work with GCS we need:
- * GCS connector jars + it's dependencies (avro-tools already has all the hadoop depenecies)
+ * GCS connector jars + it's dependencies (avro-tools already has all the hadoop dependencies)
  * configure GCS connector
 
 ### GCS connector configuration
