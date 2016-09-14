@@ -1,4 +1,4 @@
-organization := "com.spotify.data"
+organization := "sh.rav.data"
 name := "avro-z"
 version := "0.1.0-SNAPSHOT"
 
