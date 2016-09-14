@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <property>
+    <name>fs.gs.impl</name>
+    <value>com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem</value>
+  </property>
+  <property>
+    <name>fs.gs.auth.service.account.enable</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>fs.gs.auth.client.id</name>
+    <value>32555940559.apps.googleusercontent.com</value>
+  </property>
+  <property>
+    <name>fs.gs.auth.client.secret</name>
+    <value>ZmssLNjJy2998hD4CTg2ejr2</value>
+  </property>
+  <property>
+    <name>fs.gs.project.id</name>
+    <value>foo</value>
+  </property>
+</configuration>
