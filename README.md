@@ -12,6 +12,8 @@ more info at the end.
 
 ## How to use:
 
+Examples below show usage of `tojson` command, but it can be any of the `avro-tools` commands (`cat`,`help`,`totext`, ...).
+
 ### Assembly:
 
 ```
