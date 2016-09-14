@@ -79,5 +79,5 @@ set:
 So:
  * register `fs.gs.impl`
  * disable service account
- * tell it to use OAuth2 by using Cloud SDK client
+ * tell it to use OAuth2 by using Cloud SDK client (this is NOT use specific)
  * give dummy project id (connector will scream otherwise)
