@@ -7,7 +7,7 @@
 Least amount of change to make avro-tools GCS compatible, and usable from
 regular workstation (non-{edgenode,gcp-node}).
 
-The whole trick is about using OAuth2, and allow use to authenticate via browser,
+The whole trick is about using OAuth2, and allow user to authenticate via browser,
 more info at the end.
 
 ## How to use:
