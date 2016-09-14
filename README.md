@@ -85,5 +85,5 @@ set:
 So:
  * register `fs.gs.impl`
  * disable service account
- * use OAuth2 by using Google's managed Cloud SDK project client id/secret (this is NOT user specific)
+ * use OAuth2 by using Google's managed Cloud SDK app client id/secret (this is NOT user specific)
  * give dummy project id (connector will scream otherwise)
