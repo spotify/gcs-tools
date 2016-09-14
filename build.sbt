@@ -13,3 +13,8 @@ libraryDependencies ++= Seq(
   "org.apache.avro" % "avro-tools" % "1.7.7",
   "com.google.cloud.bigdataoss" % "gcs-connector" % "1.5.2-hadoop2"
 )
+
+mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) => {
+  case PathList("VERSION.txt") => MergeStrategy.rename
+  case s => old(s)
+}}
