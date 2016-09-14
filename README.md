@@ -47,7 +47,7 @@ To make avro-tools work with GCS we need:
 
 ### GCS connector configuration
 
-GCS connector is not very smart, it will not pick up your gcloud configuration, instead it expect some settings
+GCS connector is not very smart, it will not pick up your gcloud configuration, instead it expects some settings
 to be set in `core-site.xml`. It seems we need to provide those. To make things as generic and still usable, we
 set:
 
