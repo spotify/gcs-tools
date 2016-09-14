@@ -10,7 +10,6 @@ scalacOptions += "-target:jvm-1.7"
 mainClass in Compile := Some("org.apache.avro.tool.Main")
 
 libraryDependencies ++= Seq(
-  //"org.apache.hadoop" % "hadoop-client" % "2.6.0.2.2.6.0-2800",
   "org.apache.avro" % "avro-tools" % "1.7.7",
   "com.google.cloud.bigdataoss" % "gcs-connector" % "1.5.2-hadoop2"
 )
