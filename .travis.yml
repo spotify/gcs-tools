@@ -8,16 +8,18 @@ script:
 
 notifications:
   email:
-  - amartin@spotify.com
-  - neville@spotify.com
-  - rav@spotify.com
+    - amartin@spotify.com
+    - neville@spotify.com
+    - rav@spotify.com
 
 deploy:
   provider: releases
   api_key:
     secure: BWRGXtg3/dDFyjdMRGnMGQGAunQ1AxnC6kaV70uJcI5eyfFTPVtsstkLsnu8AjJbNFQnUEuJC4mQuyDaAohpLgCOW04ZbH1AH82U+TwVIbdO+dbMhs0s6snQqX/vjPZ0HYaFdUmK0xIW1F4hHd3ifatJpIrmBFkdzwEtAXTiM3RVKklh6KpiIeOFmigwMn9NNaxJG4pQ7y3nP+CIaO3Hg+phL418wtpQc5Kw3XlsDRrRj6fAQk528fvlhvH7nnLElrLvDAeV7LeAFSz8bCaO5IwQxfdFk9ap0RVYgQRXlKf/py5tDUSctyrXGs9IOOYw0U3qk9FfwhmDh3/tfsLXoY1pCN+41Q2gC+Uh2ymGeJFyhJblGa3JY4u7KVO3Sdw63LT2e0iatQAdGHd/SMjG+eiuV6qzpL3XQg3W7V1NWeFPx35SGlzZ9PQ0UCqpdSqqgP8YhK0L1kVGIBV4iLp8CemrrZGCHoWudNhVdIgCO0uGKbSIXE22GZ0bhSwcxY2EbiIBaSH9Pno9SE8et9gnPvPALQcYBFpDvES6h0QxmO9DI8T9gzHKqkxOM0ch7lLjJyfwPRRqnKc4OEUO4DtCwYRqY21P8gQX0ct5ZqdJvpugi8JDUYmEG1cR+li6s72kfD36xtNPwnb5gxmun2E2CfnVjOcbmI7CiZSRfolinqE=
   file_glob: true
-  file: "(avro|parquet)-tools/target/scala-*/(avro|parquet)-tools-*.jar"
+  file:
+    - "avro-tools/target/scala-*/avro-tools-*.jar"
+    - "parquet-tools/target/scala-*/parquet-tools-*.jar"
   skip_cleanup: true
   on:
     scala: 2.11.8
