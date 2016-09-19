@@ -1,6 +1,7 @@
 GCS Tools
 =========
 
+[![Build Status](https://travis-ci.org/spotify/gcs-tools.svg?branch=master)](https://travis-ci.org/spotify/gcs-tools)
 [![GitHub license](https://img.shields.io/github/license/spotify/gcs-tools.svg)](./LICENSE)
 
 ## Raison d'être:
