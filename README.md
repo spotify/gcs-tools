@@ -30,34 +30,10 @@ To make avro-tools and parquet-tools work with GCS we need:
 - GCS connector configuration
 
 GCS connector is not very smart. It does not pick up your gcloud configuration,
-and instead expects settings in `core-site.xml`, including:
+and instead expects settings in [core-site.xml](https://github.com/spotify/gcs-tools/blob/master/shared/src/main/resources/core-site.xml),
+including:
 
 - register `fs.gs.impl`
 - disable service account
 - use OAuth2 by using Google's managed Cloud SDK client id/secret (this is NOT user specific)
 - give dummy project id (connector will scream otherwise)
-
-```
-<configuration>
-  <property>
-    <name>fs.gs.impl</name>
-    <value>com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem</value>
-  </property>
-  <property>
-    <name>fs.gs.auth.service.account.enable</name>
-    <value>false</value>
-  </property>
-  <property>
-    <name>fs.gs.auth.client.id</name>
-    <value>32555940559.apps.googleusercontent.com</value>
-  </property>
-  <property>
-    <name>fs.gs.auth.client.secret</name>
-    <value>ZmssLNjJy2998hD4CTg2ejr2</value>
-  </property>
-  <property>
-    <name>fs.gs.project.id</name>
-    <value>foo</value>
-  </property>
-</configuration>
-```
