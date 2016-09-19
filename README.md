@@ -18,6 +18,15 @@ It uses your existing OAuth2 credentials and allows authentication via a browser
 
 ## Usage:
 
+You can install the tools via our [Homebrew tap](https://github.com/spotify/homebrew-public) on Mac.
+
+```
+brew tap spotify/public
+brew install gcs-avro-tools gcs-parquet-tools
+```
+
+Or build them yourself.
+
 ```
 sbt assembly
 java -jar avro-tools/target/scala-2.10/avro-tools-1.8.1.jar tojson <GCS_PATH>
