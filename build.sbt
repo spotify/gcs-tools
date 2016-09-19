@@ -2,14 +2,16 @@ organization := "com.spotify.data"
 name := "gcs-tools"
 version := "0.1.0-SNAPSHOT"
 
-scalaVersion := "2.11.8"
-autoScalaLibrary := false
-
 val gcsVersion = "1.5.2-hadoop2"
 val guavaVersion = "19.0"
 val hadoopVersion = "2.7.3"
 val avroVersion = "1.8.1"
 val parquetVersion = "1.8.1"
+
+val commonSettings = Project.defaultSettings ++ assemblySettings ++ Seq(
+  scalaVersion := "2.11.8",
+  autoScalaLibrary := false
+)
 
 lazy val root: Project = Project(
   "gcs-tools",
@@ -21,13 +23,14 @@ lazy val root: Project = Project(
 
 lazy val shared: Project = Project(
   "shared",
-  file("shared")
+  file("shared"),
+  settings = commonSettings
 )
 
 lazy val avroTools: Project = Project(
   "avro-tools",
   file("avro-tools"),
-  settings = Project.defaultSettings ++ assemblySettings ++ Seq(
+  settings = commonSettings ++ Seq(
     mainClass in assembly := Some("org.apache.avro.tool.Main"),
     assemblyJarName in assembly := s"avro-tools-$avroVersion.jar",
     libraryDependencies ++= Seq(
@@ -42,7 +45,7 @@ lazy val avroTools: Project = Project(
 lazy val parquetTools: Project = Project(
   "parquet-tools",
   file("parquet-tools"),
-  settings = Project.defaultSettings ++ assemblySettings ++ Seq(
+  settings = commonSettings ++ Seq(
     mainClass in assembly := Some("org.apache.parquet.tools.Main"),
     assemblyJarName in assembly := s"parquet-tools-$parquetVersion.jar",
     libraryDependencies ++= Seq(
