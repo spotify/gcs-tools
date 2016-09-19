@@ -76,6 +76,7 @@ lazy val assemblySettings = Seq(
     case PathList("META-INF", "DUMMY.DSA") => MergeStrategy.discard
     case PathList("META-INF", "MSFTSIG.RSA") => MergeStrategy.discard
     case PathList("META-INF", "MSFTSIG.SF") => MergeStrategy.discard
+    case PathList("META-INF", "NOTICE") => MergeStrategy.rename
     case _ => MergeStrategy.last
   }}
 )
