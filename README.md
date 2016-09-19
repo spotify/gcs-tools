@@ -1,6 +1,8 @@
 GCS Tools
 =========
 
+[![GitHub license](https://img.shields.io/github/license/spotify/gcs-tools.svg)](./LICENSE)
+
 ## Raison d'être:
 
 Light weight wrapper that adds [Google Cloud
