@@ -34,7 +34,7 @@ and instead expects settings in `core-site.xml`, including:
 
 - register `fs.gs.impl`
 - disable service account
-- use OAuth2 by using Cloud SDK client (this is NOT user specific)
+- use OAuth2 by using Google's managed Cloud SDK client id/secret (this is NOT user specific)
 - give dummy project id (connector will scream otherwise)
 
 ```
