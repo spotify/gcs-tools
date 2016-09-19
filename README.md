@@ -13,7 +13,7 @@ tools, including
 so that they can be used from regular workstations or laptops, outside of a
 [Google Compute Engine](https://cloud.google.com/compute/) (GCE) instance.
 
-It uses your existing OAuth2 credentials and allows authentication via browse.
+It uses your existing OAuth2 credentials and allows authentication via a browser.
 
 ## Usage:
 
