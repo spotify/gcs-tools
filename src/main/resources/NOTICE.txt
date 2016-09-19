@@ -1,5 +1,0 @@
-Avro-Z - GCS compatible Apache Avro Tools
-
-WARNING: this is PoC, use at your own risk.
-
-Read https://github.com/ravwojdyla/avro-z
