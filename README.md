@@ -38,14 +38,8 @@ java -jar parquet-tools/target/scala-2.10/parquet-tools-1.8.1.jar cat <GCS_PATH>
 ## How it works:
 
 To make avro-tools and parquet-tools work with GCS we need:
-- GCS connector and its dependencies
-- GCS connector configuration
+- [GCS connector](https://github.com/GoogleCloudPlatform/bigdata-interop) and its dependencies
+- [GCS connector configuration](//github.com/spotify/gcs-tools/blob/master/shared/src/main/resources/core-site.xml)
 
-GCS connector is not very smart. It does not pick up your gcloud configuration,
-and instead expects settings in [core-site.xml](https://github.com/spotify/gcs-tools/blob/master/shared/src/main/resources/core-site.xml),
-including:
-
-- register `fs.gs.impl`
-- disable service account
-- use OAuth2 by using Google's managed Cloud SDK client id/secret (this is NOT user specific)
-- give dummy project id (connector will scream otherwise)
+GCS connector won't pick up your local gcloud configuration, and instead expects settings
+in [core-site.xml](https://github.com/spotify/gcs-tools/blob/master/shared/src/main/resources/core-site.xml).
