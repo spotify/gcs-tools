@@ -23,6 +23,8 @@ You can install the tools via our [Homebrew tap](https://github.com/spotify/home
 ```
 brew tap spotify/public
 brew install gcs-avro-tools gcs-parquet-tools
+avro-tools tojson <GCS_PATH>
+parquet-tools cat <GCS_PATH>
 ```
 
 Or build them yourself.
