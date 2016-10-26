@@ -9,8 +9,9 @@ GCS Tools
 Light weight wrapper that adds [Google Cloud
 Storage](https://cloud.google.com/storage/) (GCS) support to common Hadoop
 tools, including
-[avro-tools](https://mvnrepository.com/artifact/org.apache.avro/avro-tools) and
-[parquet-tools](https://mvnrepository.com/artifact/org.apache.parquet/parquet-tools),
+[avro-tools](https://mvnrepository.com/artifact/org.apache.avro/avro-tools),
+[parquet-tools](https://mvnrepository.com/artifact/org.apache.parquet/parquet-tools) and
+proto-tools for [Scio](https://github.com/spotify/scio)'s Protobuf in Avro file,
 so that they can be used from regular workstations or laptops, outside of a
 [Google Compute Engine](https://cloud.google.com/compute/) (GCE) instance.
 
@@ -22,17 +23,19 @@ You can install the tools via our [Homebrew tap](https://github.com/spotify/home
 
 ```
 brew tap spotify/public
-brew install gcs-avro-tools gcs-parquet-tools
+brew install gcs-avro-tools gcs-parquet-tools gcs-proto-tools
 avro-tools tojson <GCS_PATH>
 parquet-tools cat <GCS_PATH>
+proto-tools tojson <GCS_PATH>
 ```
 
 Or build them yourself.
 
 ```
 sbt assembly
-java -jar avro-tools/target/scala-2.10/avro-tools-1.8.1.jar tojson <GCS_PATH>
-java -jar parquet-tools/target/scala-2.10/parquet-tools-1.8.1.jar cat <GCS_PATH>
+java -jar avro-tools/target/scala-2.11/avro-tools-1.8.1.jar tojson <GCS_PATH>
+java -jar parquet-tools/target/scala-2.11/parquet-tools-1.8.1.jar cat <GCS_PATH>
+java -jar proto-tools/target/scala-2.11/proto-tools-3.1.0.jar cat <GCS_PATH>
 ```
 
 ## How it works:

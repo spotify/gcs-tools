@@ -7,6 +7,8 @@ val guavaVersion = "19.0"
 val hadoopVersion = "2.7.3"
 val avroVersion = "1.8.1"
 val parquetVersion = "1.8.1"
+val protobufVersion = "3.1.0"
+val protobufGenericVersion = "0.1.0"
 
 val commonSettings = Project.defaultSettings ++ assemblySettings ++ Seq(
   scalaVersion := "2.11.8",
@@ -18,7 +20,8 @@ lazy val root: Project = Project(
   file(".")
 ).aggregate(
   avroTools,
-  parquetTools
+  parquetTools,
+  protoTools
 )
 
 lazy val shared: Project = Project(
@@ -51,6 +54,26 @@ lazy val parquetTools: Project = Project(
     libraryDependencies ++= Seq(
       "org.apache.parquet" % "parquet-tools" % parquetVersion,
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
+      "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
+    )
+  )
+).dependsOn(
+  shared
+)
+
+lazy val protoTools: Project = Project(
+  "proto-tools",
+  file("proto-tools"),
+  settings = commonSettings ++ Seq(
+    mainClass in assembly := Some("org.apache.avro.tool.ProtoMain"),
+    assemblyJarName in assembly := s"proto-tools-$protobufVersion.jar",
+    assemblyShadeRules in assembly := Seq(
+      ShadeRule.zap("com.google.protobuf.**").inLibrary("org.apache.avro" % "avro-tools" % avroVersion)
+    ),
+    libraryDependencies ++= Seq(
+      "me.lyh" %% "protobuf-generic" % protobufGenericVersion,
+      "com.google.protobuf" % "protobuf-java" % protobufVersion,
+      "org.apache.avro" % "avro-tools" % avroVersion,
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
     )
   )
