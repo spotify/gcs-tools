@@ -3,7 +3,6 @@ name := "gcs-tools"
 version := "0.1.4-SNAPSHOT"
 
 val gcsVersion = "1.5.2-hadoop2"
-val guavaVersion = "19.0"
 val hadoopVersion = "2.7.3"
 val avroVersion = "1.8.1"
 val parquetVersion = "1.8.1"
@@ -71,7 +70,7 @@ lazy val protoTools: Project = Project(
       ShadeRule.zap("com.google.protobuf.**").inLibrary("org.apache.avro" % "avro-tools" % avroVersion)
     ),
     libraryDependencies ++= Seq(
-      "me.lyh" %% "protobuf-generic" % protobufGenericVersion,
+      "me.lyh" %% "protobuf-generic" % protobufGenericVersion exclude("com.google.guava", "guava"),
       "com.google.protobuf" % "protobuf-java" % protobufVersion,
       "org.apache.avro" % "avro-tools" % avroVersion,
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
