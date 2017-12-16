@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#sbt clean assembly
+sbt clean assembly
 
 rm -rf bin
 mkdir bin
