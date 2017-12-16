@@ -1,6 +1,6 @@
 language: scala
 scala:
-  - 2.11.8
+  - 2.11.11
 jdk: oraclejdk7
 
 script:
@@ -8,9 +8,7 @@ script:
 
 notifications:
   email:
-    - amartin@spotify.com
-    - neville@spotify.com
-    - rav@spotify.com
+    - flatmap-squad@spotify.com
 
 deploy:
   provider: releases
@@ -23,5 +21,5 @@ deploy:
     - "proto-tools/target/scala-*/proto-tools-*.jar"
   skip_cleanup: true
   on:
-    scala: 2.11.8
+    scala: 2.11.11
     tags: true
