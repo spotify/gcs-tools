@@ -2,15 +2,15 @@ organization := "com.spotify.data"
 name := "gcs-tools"
 version := "0.1.4-SNAPSHOT"
 
-val gcsVersion = "1.5.2-hadoop2"
-val hadoopVersion = "2.7.3"
-val avroVersion = "1.8.1"
-val parquetVersion = "1.8.1"
-val protobufVersion = "3.1.0"
-val protobufGenericVersion = "0.1.0"
+val gcsVersion = "1.6.2-hadoop2"
+val hadoopVersion = "2.7.4"
+val avroVersion = "1.8.2"
+val parquetVersion = "1.9.0"
+val protobufVersion = "3.4.0"
+val protobufGenericVersion = "0.2.2"
 
 val commonSettings = Project.defaultSettings ++ assemblySettings ++ Seq(
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.11.11",
   autoScalaLibrary := false
 )
 
