@@ -1,6 +1,6 @@
 organization := "com.spotify.data"
 name := "gcs-tools"
-version := "0.1.7-SNAPSHOT"
+version := "0.1.7"
 
 val gcsVersion = "1.6.2-hadoop2"
 val hadoopVersion = "2.7.4"
