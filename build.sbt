@@ -4,8 +4,8 @@ version := "0.1.8-SNAPSHOT"
 
 val gcsVersion = "1.6.3-hadoop2"
 val hadoopVersion = "2.7.4"
-val avroVersion = "1.9.0"
-val parquetVersion = "1.10.1"
+val avroVersion = "1.8.2"
+val parquetVersion = "1.11.0"
 val protobufVersion = "3.4.0"
 val protobufGenericVersion = "0.2.4"
 
