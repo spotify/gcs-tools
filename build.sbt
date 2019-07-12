@@ -2,10 +2,10 @@ organization := "com.spotify.data"
 name := "gcs-tools"
 version := "0.1.8-SNAPSHOT"
 
-val gcsVersion = "1.6.2-hadoop2"
+val gcsVersion = "1.6.3-hadoop2"
 val hadoopVersion = "2.7.4"
-val avroVersion = "1.8.2"
-val parquetVersion = "1.9.0"
+val avroVersion = "1.9.0"
+val parquetVersion = "1.10.1"
 val protobufVersion = "3.4.0"
 val protobufGenericVersion = "0.2.4"
 
@@ -53,6 +53,7 @@ lazy val parquetTools: Project = Project(
     libraryDependencies ++= Seq(
       "org.apache.parquet" % "parquet-tools" % parquetVersion,
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
+      "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
     )
   )
