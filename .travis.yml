@@ -1,7 +1,9 @@
 language: scala
 scala:
   - 2.12.8
-jdk: oraclejdk9
+jdk:
+  - oraclejdk7
+  - oraclejdk9
 
 script:
   - sbt assembly
