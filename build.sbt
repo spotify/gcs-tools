@@ -2,37 +2,36 @@ organization := "com.spotify.data"
 name := "gcs-tools"
 version := "0.1.8-SNAPSHOT"
 
-val gcsVersion = "1.6.2-hadoop2"
+val gcsVersion = "1.6.3-hadoop2"
 val hadoopVersion = "2.7.4"
 val avroVersion = "1.8.2"
-val parquetVersion = "1.9.0"
+val parquetVersion = "1.10.1"
 val protobufVersion = "3.4.0"
 val protobufGenericVersion = "0.2.4"
 
-val commonSettings = Project.defaultSettings ++ assemblySettings ++ Seq(
-  scalaVersion := "2.11.12",
+val commonSettings = assemblySettings ++ Seq(
+  scalaVersion := "2.12.8",
   autoScalaLibrary := false
 )
 
-lazy val root: Project = Project(
-  "gcs-tools",
-  file(".")
+lazy val root  = (
+  project in file (".")
 ).aggregate(
   avroTools,
   parquetTools,
   protoTools
 )
 
-lazy val shared: Project = Project(
-  "shared",
-  file("shared"),
-  settings = commonSettings
+lazy val shared = (
+  project in file("shared")
+).settings(
+  commonSettings
 )
 
-lazy val avroTools: Project = Project(
-  "avro-tools",
-  file("avro-tools"),
-  settings = commonSettings ++ Seq(
+lazy val avroTools = (
+  project in file ("avro-tools")
+).settings(
+  commonSettings ++ Seq(
     mainClass in assembly := Some("org.apache.avro.tool.Main"),
     assemblyJarName in assembly := s"avro-tools-$avroVersion.jar",
     libraryDependencies ++= Seq(
@@ -44,15 +43,16 @@ lazy val avroTools: Project = Project(
   shared
 )
 
-lazy val parquetTools: Project = Project(
-  "parquet-tools",
-  file("parquet-tools"),
-  settings = commonSettings ++ Seq(
+lazy val parquetTools = (
+  project in file ("parquet-tools")
+).settings(
+  commonSettings ++ Seq(
     mainClass in assembly := Some("org.apache.parquet.tools.Main"),
     assemblyJarName in assembly := s"parquet-tools-$parquetVersion.jar",
     libraryDependencies ++= Seq(
       "org.apache.parquet" % "parquet-tools" % parquetVersion,
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
+      "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
     )
   )
@@ -60,10 +60,10 @@ lazy val parquetTools: Project = Project(
   shared
 )
 
-lazy val protoTools: Project = Project(
-  "proto-tools",
-  file("proto-tools"),
-  settings = commonSettings ++ Seq(
+lazy val protoTools = (
+  project in file("proto-tools")
+).settings(
+  commonSettings ++ Seq(
     mainClass in assembly := Some("org.apache.avro.tool.ProtoMain"),
     assemblyJarName in assembly := s"proto-tools-$protobufVersion.jar",
     assemblyShadeRules in assembly := Seq(
@@ -81,7 +81,7 @@ lazy val protoTools: Project = Project(
 )
 
 lazy val assemblySettings = Seq(
-  mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) => {
+  assemblyMergeStrategy in assembly ~= (old => {
     case s if s.endsWith(".properties") => MergeStrategy.filterDistinctLines
     case s if s.endsWith("pom.xml") => MergeStrategy.last
     case s if s.endsWith(".class") => MergeStrategy.last
@@ -103,5 +103,5 @@ lazy val assemblySettings = Seq(
     case PathList("META-INF", "MSFTSIG.SF") => MergeStrategy.discard
     case PathList("META-INF", "NOTICE") => MergeStrategy.rename
     case _ => MergeStrategy.last
-  }}
+  })
 )

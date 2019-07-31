@@ -33,9 +33,9 @@ Or build them yourself.
 
 ```
 sbt assembly
-java -jar avro-tools/target/scala-2.11/avro-tools-1.8.1.jar tojson <GCS_PATH>
-java -jar parquet-tools/target/scala-2.11/parquet-tools-1.8.1.jar cat <GCS_PATH>
-java -jar proto-tools/target/scala-2.11/proto-tools-3.1.0.jar cat <GCS_PATH>
+java -jar avro-tools/target/scala-2.12/avro-tools-1.8.2.jar tojson <GCS_PATH>
+java -jar parquet-tools/target/scala-2.12/parquet-tools-1.10.1.jar cat <GCS_PATH>
+java -jar proto-tools/target/scala-2.12/proto-tools-3.4.0.jar cat <GCS_PATH>
 ```
 
 ## How it works:

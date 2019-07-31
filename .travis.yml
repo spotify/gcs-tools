@@ -1,7 +1,8 @@
 language: scala
 scala:
-  - 2.11.12
-jdk: oraclejdk7
+  - 2.12.8
+jdk:
+  - oraclejdk9
 
 script:
   - sbt assembly
@@ -21,5 +22,5 @@ deploy:
     - "proto-tools/target/scala-*/proto-tools-*.jar"
   skip_cleanup: true
   on:
-    scala: 2.11.12
+    scala: 2.12.8
     tags: true
