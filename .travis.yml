@@ -2,7 +2,12 @@ language: scala
 scala:
   - 2.12.8
 jdk:
-  - oraclejdk9
+  - openjdk12
+
+cache:
+  directories:
+    - $HOME/.sbt/boot
+    - $HOME/.ivy2/cache
 
 script:
   - sbt assembly
