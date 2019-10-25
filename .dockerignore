@@ -1,0 +1,6 @@
+.gitignore
+.travis.yml
+LICENSE
+make-binary.sh
+NOTICE
+Dockerfile
