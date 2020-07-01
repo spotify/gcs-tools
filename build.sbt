@@ -76,6 +76,20 @@ lazy val protoTools = project
 
 lazy val assemblySettings = Seq(
   assemblyMergeStrategy in assembly ~= (old => {
+    // avro-tools is a fat jar which includes old Guava classes
+    case PathList("com", "google", "common", _*)  => new sbtassembly.MergeStrategy {
+      override def name = "guava"
+      override def apply(tempDir: File, path: String, files: Seq[File]): Either[String, Seq[(File, String)]] = {
+        val sources = files.map(f => f -> sbtassembly.AssemblyUtils.sourceOfFileForMerge(tempDir, f))
+        val filtered = sources.filter(_._2._1.toString.contains("/maven2/com/google/guava/guava"))
+        val pick = if (filtered.isEmpty) {
+          files.last -> path
+        } else {
+          filtered.last._1 -> path
+        }
+        Right(Seq(pick))
+      }
+    }
     case s if s.endsWith(".properties")           => MergeStrategy.filterDistinctLines
     case s if s.endsWith("pom.xml")               => MergeStrategy.last
     case s if s.endsWith(".class")                => MergeStrategy.last
