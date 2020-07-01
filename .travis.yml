@@ -1,8 +1,8 @@
 language: scala
 scala:
-  - 2.12.8
+  - 2.12.11
 jdk:
-  - openjdk12
+  - openjdk8
 
 cache:
   directories:
@@ -27,5 +27,5 @@ deploy:
     - "proto-tools/target/scala-*/proto-tools-*.jar"
   skip_cleanup: true
   on:
-    scala: 2.12.8
+    repo: spotify/gcs-tools
     tags: true
