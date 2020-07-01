@@ -105,6 +105,7 @@ lazy val assemblySettings = Seq(
       MergeStrategy.filterDistinctLines
     case PathList("META-INF", "LICENSE")     => MergeStrategy.discard
     case PathList("META-INF", "MANIFEST.MF") => MergeStrategy.discard
+    case PathList("META-INF", "INDEX.LIST")  => MergeStrategy.discard
     case PathList("META-INF", "DUMMY.SF")    => MergeStrategy.discard
     case PathList("META-INF", "DUMMY.RSA")   => MergeStrategy.discard
     case PathList("META-INF", "DUMMY.DSA")   => MergeStrategy.discard
