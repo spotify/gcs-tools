@@ -34,6 +34,8 @@ lazy val avroTools = project
     assemblyJarName in assembly := s"avro-tools-$avroVersion.jar",
     libraryDependencies ++= Seq(
       "org.apache.avro" % "avro-tools" % avroVersion,
+      "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
+      "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
     )
   )
@@ -69,6 +71,8 @@ lazy val protoTools = project
       "me.lyh" %% "protobuf-generic" % protobufGenericVersion exclude ("com.google.guava", "guava"),
       "com.google.protobuf" % "protobuf-java" % protobufVersion,
       "org.apache.avro" % "avro-tools" % avroVersion,
+      "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
+      "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
     )
   )
@@ -76,20 +80,11 @@ lazy val protoTools = project
 
 lazy val assemblySettings = Seq(
   assemblyMergeStrategy in assembly ~= (old => {
-    // avro-tools is a fat jar which includes old Guava classes
-    case PathList("com", "google", "common", _*)  => new sbtassembly.MergeStrategy {
-      override def name = "guava"
-      override def apply(tempDir: File, path: String, files: Seq[File]): Either[String, Seq[(File, String)]] = {
-        val sources = files.map(f => f -> sbtassembly.AssemblyUtils.sourceOfFileForMerge(tempDir, f))
-        val filtered = sources.filter(_._2._1.toString.contains("/maven2/com/google/guava/guava"))
-        val pick = if (filtered.isEmpty) {
-          files.last -> path
-        } else {
-          filtered.last._1 -> path
-        }
-        Right(Seq(pick))
-      }
-    }
+    // avro-tools is a fat jar which includes old Guava & Hadoop classes
+    case PathList("com", "google", "common", _*)  =>
+      jarFilter("guava")(_.toString.contains("/com/google/guava/guava"))
+    case PathList("org", "apache", "hadoop", _*)  =>
+      jarFilter("hadoop")(_.toString.contains("/org/apache/hadoop/hadoop"))
     case s if s.endsWith(".properties")           => MergeStrategy.filterDistinctLines
     case s if s.endsWith("pom.xml")               => MergeStrategy.last
     case s if s.endsWith(".class")                => MergeStrategy.last
@@ -106,12 +101,27 @@ lazy val assemblySettings = Seq(
     case PathList("META-INF", "LICENSE")     => MergeStrategy.discard
     case PathList("META-INF", "MANIFEST.MF") => MergeStrategy.discard
     case PathList("META-INF", "INDEX.LIST")  => MergeStrategy.discard
-    case PathList("META-INF", "DUMMY.SF")    => MergeStrategy.discard
-    case PathList("META-INF", "DUMMY.RSA")   => MergeStrategy.discard
-    case PathList("META-INF", "DUMMY.DSA")   => MergeStrategy.discard
-    case PathList("META-INF", "MSFTSIG.RSA") => MergeStrategy.discard
-    case PathList("META-INF", "MSFTSIG.SF")  => MergeStrategy.discard
+    case PathList("META-INF", s) if s.endsWith(".DSA") => MergeStrategy.discard
+    case PathList("META-INF", s) if s.endsWith(".RSA") => MergeStrategy.discard
+    case PathList("META-INF", s) if s.endsWith(".SF")  => MergeStrategy.discard
     case PathList("META-INF", "NOTICE")      => MergeStrategy.rename
     case _                                   => MergeStrategy.last
   })
 )
+
+import sbtassembly.AssemblyUtils
+import sbtassembly.MergeStrategy
+
+def jarFilter(_name: String)(f: File => Boolean): MergeStrategy = new MergeStrategy {
+  override def name = _name
+
+  override def apply(tempDir: File, path: String, files: Seq[File]): Either[String, Seq[(File, String)]] = {
+    val filtered = files
+      .map(f => f -> AssemblyUtils.sourceOfFileForMerge(tempDir, f))
+      .filter { case (_, (jar, _, _, isJar)) =>
+        isJar && f(jar)
+      }
+    val pick = if (filtered.isEmpty) files.last else filtered.last._1
+    Right(Seq(pick -> path))
+  }
+}
