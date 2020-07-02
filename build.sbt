@@ -2,8 +2,8 @@ organization := "com.spotify.data"
 name := "gcs-tools"
 version := "0.1.9-SNAPSHOT"
 
-val gcsVersion = "hadoop2-2.1.3"
-val hadoopVersion = "2.10.0"
+val gcsVersion = "hadoop3-2.1.3"
+val hadoopVersion = "3.2.1"
 val avroVersion = "1.8.2"
 val parquetVersion = "1.11.0"
 val protobufVersion = "3.12.2"
@@ -11,7 +11,8 @@ val protobufGenericVersion = "0.2.8"
 
 val commonSettings = assemblySettings ++ Seq(
   scalaVersion := "2.12.11",
-  autoScalaLibrary := false
+  autoScalaLibrary := false,
+  javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 )
 
 lazy val root = project
