@@ -1,6 +1,7 @@
+import ReleaseTransformations._
+
 organization := "com.spotify.data"
 name := "gcs-tools"
-version := "0.1.9-SNAPSHOT"
 
 val gcsVersion = "hadoop3-2.1.3"
 val hadoopVersion = "3.2.1"
@@ -17,6 +18,20 @@ val commonSettings = assemblySettings ++ Seq(
 
 lazy val root = project
   .in(file("."))
+  .settings(
+    releaseProcess := Seq[ReleaseStep](
+      checkSnapshotDependencies,
+      inquireVersions,
+      runClean,
+      runTest,
+      setReleaseVersion,
+      commitReleaseVersion,
+      tagRelease,
+      setNextVersion,
+      commitNextVersion,
+      pushChanges
+    )
+  )
   .aggregate(
     avroTools,
     parquetTools,
