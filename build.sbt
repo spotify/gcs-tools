@@ -7,7 +7,7 @@ val gcsVersion = "hadoop3-2.1.3"
 val hadoopVersion = "3.2.1"
 val avroVersion = "1.8.2"
 val parquetVersion = "1.11.0"
-val protobufVersion = "3.12.2"
+val protobufVersion = "3.12.4"
 val protobufGenericVersion = "0.2.8"
 
 val commonSettings = assemblySettings ++ Seq(
@@ -99,6 +99,8 @@ lazy val assemblySettings = Seq(
     // avro-tools is a fat jar which includes old Guava & Hadoop classes
     case PathList("com", "google", "common", _*)  =>
       jarFilter("guava")(_.toString.contains("/com/google/guava/guava"))
+    case PathList("com", "google", "protobuf", _*)  =>
+      jarFilter("protobuf")(_.toString.contains("/com/google/protobuf/protobuf-java"))
     case PathList("org", "apache", "hadoop", _*)  =>
       jarFilter("hadoop")(_.toString.contains("/org/apache/hadoop/hadoop"))
     case s if s.endsWith(".properties")           => MergeStrategy.filterDistinctLines
