@@ -8,7 +8,7 @@ val hadoopVersion = "3.2.1"
 val avroVersion = "1.8.2"
 val parquetVersion = "1.11.0"
 val protobufVersion = "3.12.4"
-val protobufGenericVersion = "0.2.8"
+val protobufGenericVersion = "0.2.9"
 
 val commonSettings = assemblySettings ++ Seq(
   scalaVersion := "2.12.11",
