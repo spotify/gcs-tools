@@ -5,13 +5,13 @@ name := "gcs-tools"
 
 val gcsVersion = "hadoop3-2.1.3"
 val hadoopVersion = "3.2.1"
-val avroVersion = "1.8.2"
-val parquetVersion = "1.11.0"
+val avroVersion = "1.10.0"
+val parquetVersion = "1.11.1"
 val protobufVersion = "3.12.4"
 val protobufGenericVersion = "0.2.9"
 
 val commonSettings = assemblySettings ++ Seq(
-  scalaVersion := "2.12.11",
+  scalaVersion := "2.12.12",
   autoScalaLibrary := false,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 )
