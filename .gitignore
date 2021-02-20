@@ -6,5 +6,6 @@ target
 .bigquery
 .scio_repl
 .bloop
+.bsp
 .metals
 .java-version
