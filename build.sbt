@@ -3,15 +3,15 @@ import ReleaseTransformations._
 organization := "com.spotify.data"
 name := "gcs-tools"
 
-val gcsVersion = "hadoop3-2.1.3"
-val hadoopVersion = "3.2.1"
-val avroVersion = "1.10.0"
+val gcsVersion = "hadoop3-2.2.0"
+val hadoopVersion = "3.2.2"
+val avroVersion = "1.10.1"
 val parquetVersion = "1.11.1"
-val protobufVersion = "3.12.4"
+val protobufVersion = "3.15.1"
 val protobufGenericVersion = "0.2.9"
 
 val commonSettings = assemblySettings ++ Seq(
-  scalaVersion := "2.13.3",
+  scalaVersion := "2.13.4",
   autoScalaLibrary := false,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 )
