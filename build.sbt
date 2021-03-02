@@ -11,7 +11,7 @@ val protobufVersion = "3.15.1"
 val protobufGenericVersion = "0.2.9"
 
 val commonSettings = assemblySettings ++ Seq(
-  scalaVersion := "2.13.4",
+  scalaVersion := "2.13.5",
   autoScalaLibrary := false,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 )
