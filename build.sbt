@@ -9,6 +9,7 @@ val avroVersion = "1.10.1"
 val parquetVersion = "1.11.1"
 val protobufVersion = "3.15.1"
 val protobufGenericVersion = "0.2.9"
+val commonsLangVersion = "2.6"
 
 val commonSettings = assemblySettings ++ Seq(
   scalaVersion := "2.13.5",
@@ -34,7 +35,7 @@ lazy val root = project
   )
   .aggregate(
     avroTools,
-    parquetTools,
+    parquetCli,
     protoTools
   )
 
@@ -57,17 +58,19 @@ lazy val avroTools = project
   )
   .dependsOn(shared)
 
-lazy val parquetTools = project
-  .in(file("parquet-tools"))
+lazy val parquetCli = project
+  .in(file("parquet-cli"))
   .settings(commonSettings)
   .settings(
-    mainClass in assembly := Some("org.apache.parquet.tools.Main"),
-    assemblyJarName in assembly := s"parquet-tools-$parquetVersion.jar",
+    mainClass in assembly := Some("org.apache.parquet.cli.Main"),
+    assemblyJarName in assembly := s"parquet-cli-$parquetVersion.jar",
     libraryDependencies ++= Seq(
-      "org.apache.parquet" % "parquet-tools" % parquetVersion,
+      "org.apache.parquet" % "parquet-cli" % parquetVersion,
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
       "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
-      "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
+      "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion,
+      // Broken transitive from hadoop-common, fixed in 1.12.0 (PARQUET-1844)
+      "commons-lang" % "commons-lang" % commonsLangVersion
     )
   )
   .dependsOn(shared)
