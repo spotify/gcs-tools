@@ -7,7 +7,7 @@ val gcsVersion = "hadoop3-2.2.0"
 val hadoopVersion = "3.3.0"
 val avroVersion = "1.10.1"
 val parquetVersion = "1.11.1"
-val protobufVersion = "3.15.1"
+val protobufVersion = "3.15.5"
 val protobufGenericVersion = "0.2.9"
 val commonsLangVersion = "2.6"
 
