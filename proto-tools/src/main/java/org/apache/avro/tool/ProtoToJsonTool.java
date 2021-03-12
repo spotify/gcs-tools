@@ -8,6 +8,8 @@ import joptsimple.OptionSpec;
 import org.apache.avro.file.DataFileStream;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -45,7 +47,10 @@ public class ProtoToJsonTool implements Tool {
       return 1;
     }
 
-    BufferedInputStream inStream = Util.fileOrStdin(nargs.get(0), in);
+    Path p = new Path(nargs.get(0));
+    Configuration conf = new Configuration();
+    InputStream input = nargs.get(0).equals("-") ? in : p.getFileSystem(conf).open(p);
+    BufferedInputStream inStream = new BufferedInputStream(input);
 
     GenericDatumReader<Object> reader = new GenericDatumReader<>();
     DataFileStream<Object> streamReader = new DataFileStream<>(inStream, reader);

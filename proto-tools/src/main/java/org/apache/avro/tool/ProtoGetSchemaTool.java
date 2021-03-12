@@ -2,6 +2,9 @@ package org.apache.avro.tool;
 
 import org.apache.avro.file.DataFileReader;
 import org.apache.avro.generic.GenericDatumReader;
+import org.apache.avro.mapred.FsInput;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
 
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -27,7 +30,7 @@ public class ProtoGetSchemaTool implements Tool {
       return 1;
     }
     DataFileReader<Void> reader =
-        new DataFileReader<>(Util.openSeekableFromFS(args.get(0)),
+        new DataFileReader<>(new FsInput(new Path(args.get(0)), new Configuration()),
             new GenericDatumReader<Void>());
     out.println(reader.getMetaString("protobuf.generic.schema"));
     return 0;

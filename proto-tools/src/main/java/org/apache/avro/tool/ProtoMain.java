@@ -65,10 +65,8 @@ public class ProtoMain {
             System.in, System.out, System.err, Arrays.asList(args).subList(1, args.length));
       }
     }
-    System.err.print("Version ");
-    printStream(ProtoMain.class.getClassLoader().getResourceAsStream("VERSION.txt"));
-    System.err.print(" of ");
-    printHead(ProtoMain.class.getClassLoader().getResourceAsStream("META-INF/NOTICE"), 5);
+
+    System.err.println("Protobuf Tools");
     System.err.println("----------------");
 
     System.err.println("Available tools:");

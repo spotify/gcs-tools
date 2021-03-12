@@ -84,15 +84,11 @@ lazy val protoTools = project
   .settings(
     mainClass in assembly := Some("org.apache.avro.tool.ProtoMain"),
     assemblyJarName in assembly := s"proto-tools-$protobufVersion.jar",
-    assemblyShadeRules in assembly := Seq(
-      ShadeRule
-        .zap("com.google.protobuf.**")
-        .inLibrary("org.apache.avro" % "avro-tools" % avroVersion)
-    ),
     libraryDependencies ++= Seq(
-      "me.lyh" %% "protobuf-generic" % protobufGenericVersion exclude ("com.google.guava", "guava"),
+      "me.lyh" %% "protobuf-generic" % protobufGenericVersion,
+      "net.sf.jopt-simple" % "jopt-simple" % joptVersion,
       "com.google.protobuf" % "protobuf-java" % protobufVersion,
-      "org.apache.avro" % "avro-tools" % avroVersion,
+      "org.apache.avro" % "avro-mapred" % avroVersion,
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
       "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
