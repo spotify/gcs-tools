@@ -6,14 +6,7 @@ GCS Tools
 
 ## Raison d'être:
 
-Light weight wrapper that adds [Google Cloud
-Storage](https://cloud.google.com/storage/) (GCS) support to common Hadoop
-tools, including
-[avro-tools](https://mvnrepository.com/artifact/org.apache.avro/avro-tools),
-[parquet-cli](https://mvnrepository.com/artifact/org.apache.parquet/parquet-cli) and
-proto-tools for [Scio](https://github.com/spotify/scio)'s Protobuf in Avro file,
-so that they can be used from regular workstations or laptops, outside of a
-[Google Compute Engine](https://cloud.google.com/compute/) (GCE) instance.
+Light weight wrapper that adds [Google Cloud Storage](https://cloud.google.com/storage/) (GCS) support to common Hadoop tools, including [avro-tools](https://mvnrepository.com/artifact/org.apache.avro/avro-tools), [parquet-cli](https://mvnrepository.com/artifact/org.apache.parquet/parquet-cli), proto-tools for [Scio](https://github.com/spotify/scio)'s Protobuf in Avro file, and magnolify-tools for [Magnolify](https://github.com/spotify/magnolify) code generation, so that they can be used from regular workstations or laptops, outside of a [Google Compute Engine](https://cloud.google.com/compute/) (GCE) instance.
 
 It uses your existing OAuth2 credentials and allows authentication via a browser.
 
@@ -23,10 +16,11 @@ You can install the tools via our [Homebrew tap](https://github.com/spotify/home
 
 ```
 brew tap spotify/public
-brew install gcs-avro-tools gcs-parquet-cli gcs-proto-tools
+brew install gcs-avro-tools gcs-parquet-cli gcs-proto-tools gcs-magnolify-tools
 avro-tools tojson <GCS_PATH>
 parquet-cli cat <GCS_PATH>
 proto-tools tojson <GCS_PATH>
+magnolify-tools <avro|parquet> <GCS_PATH>
 ```
 
 Or build them yourself.
@@ -36,6 +30,7 @@ sbt assembly
 java -jar avro-tools/target/scala-2.13/avro-tools-*.jar tojson <GCS_PATH>
 java -jar parquet-cli/target/scala-2.13/parquet-cli-*.jar cat <GCS_PATH>
 java -jar proto-tools/target/scala-2.13/proto-tools-*.jar cat <GCS_PATH>
+java -jar magnolify-tools/target/scala-2.13/magnolify-tools-*.jar <avro|parquet> <GCS_PATH>
 ```
 
 ## How it works:
