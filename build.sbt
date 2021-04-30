@@ -50,8 +50,8 @@ lazy val avroTools = project
   .in(file("avro-tools"))
   .settings(commonSettings)
   .settings(
-    mainClass in assembly := Some("org.apache.avro.tool.Main"),
-    assemblyJarName in assembly := s"avro-tools-$avroVersion.jar",
+    assembly / mainClass := Some("org.apache.avro.tool.Main"),
+    assembly / assemblyJarName := s"avro-tools-$avroVersion.jar",
     libraryDependencies ++= Seq(
       "org.apache.avro" % "avro-tools" % avroVersion,
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
@@ -65,8 +65,8 @@ lazy val parquetCli = project
   .in(file("parquet-cli"))
   .settings(commonSettings)
   .settings(
-    mainClass in assembly := Some("org.apache.parquet.cli.Main"),
-    assemblyJarName in assembly := s"parquet-cli-$parquetVersion.jar",
+    assembly / mainClass := Some("org.apache.parquet.cli.Main"),
+    assembly / assemblyJarName := s"parquet-cli-$parquetVersion.jar",
     libraryDependencies ++= Seq(
       "org.apache.parquet" % "parquet-cli" % parquetVersion,
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
@@ -82,8 +82,8 @@ lazy val protoTools = project
   .in(file("proto-tools"))
   .settings(commonSettings)
   .settings(
-    mainClass in assembly := Some("org.apache.avro.tool.ProtoMain"),
-    assemblyJarName in assembly := s"proto-tools-$protobufVersion.jar",
+    assembly / mainClass := Some("org.apache.avro.tool.ProtoMain"),
+    assembly / assemblyJarName := s"proto-tools-$protobufVersion.jar",
     libraryDependencies ++= Seq(
       "me.lyh" %% "protobuf-generic" % protobufGenericVersion,
       "net.sf.jopt-simple" % "jopt-simple" % joptVersion,
@@ -100,8 +100,8 @@ lazy val magnolifyTools = project
   .in(file("magnolify-tools"))
   .settings(commonSettings)
   .settings(
-    mainClass in assembly := Some("magnolify.tools.Main"),
-    assemblyJarName in assembly := s"magnolify-tools-$magnolifyVersion.jar",
+    assembly / mainClass := Some("magnolify.tools.Main"),
+    assembly / assemblyJarName := s"magnolify-tools-$magnolifyVersion.jar",
     libraryDependencies ++= Seq(
       "net.sf.jopt-simple" % "jopt-simple" % joptVersion,
       "org.apache.avro" % "avro" % avroVersion,
@@ -118,7 +118,7 @@ lazy val magnolifyTools = project
   .dependsOn(shared)
 
 lazy val assemblySettings = Seq(
-  assemblyMergeStrategy in assembly ~= (old => {
+  assembly / assemblyMergeStrategy ~= (old => {
     // avro-tools is a fat jar which includes old Guava & Hadoop classes
     case PathList("com", "google", "common", _*)  =>
       jarFilter("guava")(_.toString.contains("/com/google/guava/guava"))
