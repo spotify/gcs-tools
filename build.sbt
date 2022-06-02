@@ -3,18 +3,18 @@ import ReleaseTransformations._
 organization := "com.spotify.data"
 name := "gcs-tools"
 
-val gcsVersion = "hadoop3-2.1.3"
-val hadoopVersion = "3.3.0"
+val gcsVersion = "hadoop3-2.2.6"
+val hadoopVersion = "3.3.3"
 val joptVersion = "5.0.4"
 val avroVersion = "1.11.0"
-val magnolifyVersion = "0.4.3"
-val parquetVersion = "1.11.1"
-val protobufVersion = "3.15.5"
+val magnolifyVersion = "0.4.8"
+val parquetVersion = "1.12.3"
+val protobufVersion = "3.21.1"
 val protobufGenericVersion = "0.2.9"
 val commonsLangVersion = "2.6"
 
 val commonSettings = assemblySettings ++ Seq(
-  scalaVersion := "2.13.5",
+  scalaVersion := "2.13.8",
   autoScalaLibrary := false,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 )
@@ -71,9 +71,7 @@ lazy val parquetCli = project
       "org.apache.parquet" % "parquet-cli" % parquetVersion,
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
       "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
-      "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion,
-      // Broken transitive from hadoop-common, fixed in 1.12.0 (PARQUET-1844)
-      "commons-lang" % "commons-lang" % commonsLangVersion
+      "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
     )
   )
   .dependsOn(shared)
