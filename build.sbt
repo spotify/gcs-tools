@@ -3,7 +3,7 @@ import ReleaseTransformations._
 organization := "com.spotify.data"
 name := "gcs-tools"
 
-val gcsVersion = "hadoop3-2.2.6"
+val gcsVersion = "hadoop3-2.1.8"
 val hadoopVersion = "3.3.3"
 val joptVersion = "5.0.4"
 val avroVersion = "1.11.0"
