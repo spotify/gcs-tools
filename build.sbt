@@ -119,8 +119,13 @@ lazy val magnolifyTools = project
 def dependencyFilter(
     conflicts: Vector[Assembly.Dependency]
 ): Either[String, Vector[Assembly.JarEntry]] = {
-  val filtered = conflicts.filterNot(_.module.exists(_.name == "avro-tools"))
-  Right(filtered.map(f => JarEntry(f.target, f.stream)))
+  val filtered = conflicts
+    .filter {
+      case l: Assembly.Library => l.moduleCoord.name != "avro-tools"
+      case _                   => true
+    }
+    .map(f => JarEntry(f.target, f.stream))
+  Right(filtered)
 }
 
 lazy val assemblySettings = Seq(
@@ -142,6 +147,16 @@ lazy val assemblySettings = Seq(
     case s if s.endsWith("snappyjava_snappy.dll") => MergeStrategy.last
     case s if s.endsWith(".dtd")                  => MergeStrategy.rename
     case s if s.endsWith(".xsd")                  => MergeStrategy.rename
+    case PathList("META-INF", "NOTICE")           =>
+      // avro-tools META-INF/NOTICE must not be renamed
+      CustomMergeStrategy.rename {
+        case l: Assembly.Library if l.moduleCoord.name == "avro-tools" =>
+          l.target
+        case l: Assembly.Library =>
+          l.target + "_" + l.moduleCoord.name + "-" + l.moduleCoord.version
+        case p: Assembly.Project =>
+          p.target + "_" + p.name
+      }
     case PathList("META-INF", "services", "org.apache.hadoop.fs.FileSystem") =>
       MergeStrategy.filterDistinctLines
     case PathList("META-INF", "LICENSE")               => MergeStrategy.discard
@@ -150,7 +165,6 @@ lazy val assemblySettings = Seq(
     case PathList("META-INF", s) if s.endsWith(".DSA") => MergeStrategy.discard
     case PathList("META-INF", s) if s.endsWith(".RSA") => MergeStrategy.discard
     case PathList("META-INF", s) if s.endsWith(".SF")  => MergeStrategy.discard
-    case PathList("META-INF", "NOTICE")                => MergeStrategy.rename
     case _                                             => MergeStrategy.last
   })
 )
