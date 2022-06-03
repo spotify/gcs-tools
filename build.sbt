@@ -162,8 +162,8 @@ def discardMeta(f: String): Boolean = {
 lazy val assemblySettings = Seq(
   assembly / assemblyMergeStrategy := {
     case PathList("javax", "xml", "bind", _*) =>
-      // prefer jaxb over jakarta
-      CustomMergeStrategy("xml")(exclude("jakarta.xml.bind-api"))
+      // prefer jakarta over jaxb
+      CustomMergeStrategy("xml")(exclude("jaxb-api", "avro-tools"))
     case PathList("javax", "ws", "rs", _*) =>
       // prefer rs-api over jsr311-api
       CustomMergeStrategy("rs")(exclude("jsr311-api", "avro-tools"))
