@@ -3,18 +3,18 @@ import ReleaseTransformations._
 organization := "com.spotify.data"
 name := "gcs-tools"
 
-val gcsVersion = "hadoop3-2.1.3"
-val hadoopVersion = "3.3.0"
+val gcsVersion = "hadoop3-2.1.8"
+val hadoopVersion = "3.3.3"
 val joptVersion = "5.0.4"
 val avroVersion = "1.11.0"
-val magnolifyVersion = "0.4.3"
-val parquetVersion = "1.11.1"
-val protobufVersion = "3.15.5"
+val magnolifyVersion = "0.4.8"
+val parquetVersion = "1.12.3"
+val protobufVersion = "3.21.1"
 val protobufGenericVersion = "0.2.9"
 val commonsLangVersion = "2.6"
 
 val commonSettings = assemblySettings ++ Seq(
-  scalaVersion := "2.13.5",
+  scalaVersion := "2.13.8",
   autoScalaLibrary := false,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 )
@@ -71,9 +71,7 @@ lazy val parquetCli = project
       "org.apache.parquet" % "parquet-cli" % parquetVersion,
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
       "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
-      "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion,
-      // Broken transitive from hadoop-common, fixed in 1.12.0 (PARQUET-1844)
-      "commons-lang" % "commons-lang" % commonsLangVersion
+      "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
     )
   )
   .dependsOn(shared)
@@ -117,15 +115,27 @@ lazy val magnolifyTools = project
   )
   .dependsOn(shared)
 
+// avro-tools is a fat jar which includes old Guava & Hadoop classes
+def dependencyFilter(
+    conflicts: Vector[Assembly.Dependency]
+): Either[String, Vector[Assembly.JarEntry]] = {
+  val filtered = conflicts
+    .filter {
+      case l: Assembly.Library => l.moduleCoord.name != "avro-tools"
+      case _                   => true
+    }
+    .map(f => JarEntry(f.target, f.stream))
+  Right(filtered)
+}
+
 lazy val assemblySettings = Seq(
   assembly / assemblyMergeStrategy ~= (old => {
-    // avro-tools is a fat jar which includes old Guava & Hadoop classes
-    case PathList("com", "google", "common", _*)  =>
-      jarFilter("guava")(_.toString.contains("/com/google/guava/guava"))
-    case PathList("com", "google", "protobuf", _*)  =>
-      jarFilter("protobuf")(_.toString.contains("/com/google/protobuf/protobuf-java"))
-    case PathList("org", "apache", "hadoop", _*)  =>
-      jarFilter("hadoop")(_.toString.contains("/org/apache/hadoop/hadoop"))
+    case PathList("com", "google", "common", _*) =>
+      CustomMergeStrategy("guava")(dependencyFilter)
+    case PathList("com", "google", "protobuf", _*) =>
+      CustomMergeStrategy("protobuf")(dependencyFilter)
+    case PathList("org", "apache", "hadoop", _*) =>
+      CustomMergeStrategy("hadoop")(dependencyFilter)
     case s if s.endsWith(".properties")           => MergeStrategy.filterDistinctLines
     case s if s.endsWith("pom.xml")               => MergeStrategy.last
     case s if s.endsWith(".class")                => MergeStrategy.last
@@ -137,32 +147,24 @@ lazy val assemblySettings = Seq(
     case s if s.endsWith("snappyjava_snappy.dll") => MergeStrategy.last
     case s if s.endsWith(".dtd")                  => MergeStrategy.rename
     case s if s.endsWith(".xsd")                  => MergeStrategy.rename
+    case PathList("META-INF", "NOTICE")           =>
+      // avro-tools META-INF/NOTICE must not be renamed
+      CustomMergeStrategy.rename {
+        case l: Assembly.Library if l.moduleCoord.name == "avro-tools" =>
+          l.target
+        case l: Assembly.Library =>
+          l.target + "_" + l.moduleCoord.name + "-" + l.moduleCoord.version
+        case p: Assembly.Project =>
+          p.target + "_" + p.name
+      }
     case PathList("META-INF", "services", "org.apache.hadoop.fs.FileSystem") =>
       MergeStrategy.filterDistinctLines
-    case PathList("META-INF", "LICENSE")     => MergeStrategy.discard
-    case PathList("META-INF", "MANIFEST.MF") => MergeStrategy.discard
-    case PathList("META-INF", "INDEX.LIST")  => MergeStrategy.discard
+    case PathList("META-INF", "LICENSE")               => MergeStrategy.discard
+    case PathList("META-INF", "MANIFEST.MF")           => MergeStrategy.discard
+    case PathList("META-INF", "INDEX.LIST")            => MergeStrategy.discard
     case PathList("META-INF", s) if s.endsWith(".DSA") => MergeStrategy.discard
     case PathList("META-INF", s) if s.endsWith(".RSA") => MergeStrategy.discard
     case PathList("META-INF", s) if s.endsWith(".SF")  => MergeStrategy.discard
-    case PathList("META-INF", "NOTICE")      => MergeStrategy.rename
-    case _                                   => MergeStrategy.last
+    case _                                             => MergeStrategy.last
   })
 )
-
-import sbtassembly.AssemblyUtils
-import sbtassembly.MergeStrategy
-
-def jarFilter(_name: String)(f: File => Boolean): MergeStrategy = new MergeStrategy {
-  override def name = _name
-
-  override def apply(tempDir: File, path: String, files: Seq[File]): Either[String, Seq[(File, String)]] = {
-    val filtered = files
-      .map(f => f -> AssemblyUtils.sourceOfFileForMerge(tempDir, f))
-      .filter { case (_, (jar, _, _, isJar)) =>
-        isJar && f(jar)
-      }
-    val pick = if (filtered.isEmpty) files.last else filtered.last._1
-    Right(Seq(pick -> path))
-  }
-}
