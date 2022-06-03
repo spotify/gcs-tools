@@ -128,6 +128,16 @@ def dependencyFilter(
   Right(filtered)
 }
 
+// avro-tools META-INF/NOTICE must not be renamed
+def noticeRename(d: Assembly.Dependency): String = {
+  case l: Assembly.Library if l.moduleCoord.name == "avro-tools" =>
+    l.target
+  case l: Assembly.Library =>
+    l.target + "_" + l.moduleCoord.name + "-" + l.moduleCoord.version
+  case p: Assembly.Project =>
+    p.target + "_" + p.name
+}
+
 lazy val assemblySettings = Seq(
   assembly / assemblyMergeStrategy ~= (old => {
     case PathList("com", "google", "common", _*) =>
@@ -147,16 +157,8 @@ lazy val assemblySettings = Seq(
     case s if s.endsWith("snappyjava_snappy.dll") => MergeStrategy.last
     case s if s.endsWith(".dtd")                  => MergeStrategy.rename
     case s if s.endsWith(".xsd")                  => MergeStrategy.rename
-    case PathList("META-INF", "NOTICE")           =>
-      // avro-tools META-INF/NOTICE must not be renamed
-      CustomMergeStrategy.rename {
-        case l: Assembly.Library if l.moduleCoord.name == "avro-tools" =>
-          l.target
-        case l: Assembly.Library =>
-          l.target + "_" + l.moduleCoord.name + "-" + l.moduleCoord.version
-        case p: Assembly.Project =>
-          p.target + "_" + p.name
-      }
+    case PathList("META-INF", "NOTICE") =>
+      CustomMergeStrategy.rename(noticeRename)
     case PathList("META-INF", "services", "org.apache.hadoop.fs.FileSystem") =>
       MergeStrategy.filterDistinctLines
     case PathList("META-INF", "LICENSE")               => MergeStrategy.discard
