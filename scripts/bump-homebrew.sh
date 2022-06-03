@@ -20,20 +20,20 @@ echo "Cloning spotify/homebrew-public"
 git clone -q --depth 10 git@github.com:spotify/homebrew-public.git
 cd homebrew-public
 
-for PRE in avro parquet proto; do
-    echo "Updating gcs-$PRE-tools"
-    URL=$(echo "$JARS" | grep $PRE-tools)
+for TOOL in avro-tools magnolify-tools parquet-cli proto-tools; do
+    echo "Updating gcs-$TOOL"
+    URL=$(echo "$JARS" | grep $TOOL)
     SHASUM=$(curl -sL $URL | shasum -a 256 | awk '{print $1}')
     JAR=$(basename $URL)
     echo $SHASUM $JAR
-    cat gcs-$PRE-tools.rb | \
+    cat gcs-$TOOL.rb | \
         sed "s/url \"[^\"]*\"/url \"${URL//\//\\/}\"/g" | \
         sed "s/sha256 \"[^\"]*\"/sha256 \"$SHASUM\"/g" | \
         sed "s/version \"[^\"]*\"/version \"$VERSION\"/g" | \
         sed "s/libexec\.install \"[^\"]*\"/libexec.install \"$JAR\"/g" | \
-        sed "s/libexec\/\"[^\"]*\", \"$PRE-tools\"/libexec\/\"$JAR\", \"$PRE-tools\"/g" \
-        > gcs-$PRE-tools.rb.tmp
-    mv gcs-$PRE-tools.rb.tmp gcs-$PRE-tools.rb
+        sed "s/libexec\/\"[^\"]*\", \"$TOOL\"/libexec\/\"$JAR\", \"$TOOL\"/g" \
+        > gcs-$TOOL.rb.tmp
+    mv gcs-$TOOL.rb.tmp gcs-$TOOL.rb
 done
 
 git update-index -q --refresh
