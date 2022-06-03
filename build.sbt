@@ -173,6 +173,8 @@ lazy val assemblySettings = Seq(
     case PathList("org", "slf4j", "impl", _*) =>
       // prefer slf4j-reload4j over slf4j-log4j12
       CustomMergeStrategy("slf4j-log4j")(exclude("slf4j-log4j12", "avro-tools"))
+    case "log4j.properties" =>
+      MergeStrategy.preferProject
     case x if x.endsWith(".properties") =>
       MergeStrategy.filterDistinctLines
     case PathList("META-INF", "services", _*) =>
