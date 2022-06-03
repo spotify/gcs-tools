@@ -115,56 +115,90 @@ lazy val magnolifyTools = project
   )
   .dependsOn(shared)
 
-// avro-tools is a fat jar which includes old Guava & Hadoop classes
-def dependencyFilter(
-    conflicts: Vector[Assembly.Dependency]
+def exclude(moduleNames: String*)(
+    dependencies: Vector[Assembly.Dependency]
 ): Either[String, Vector[Assembly.JarEntry]] = {
-  val filtered = conflicts
-    .filter {
-      case l: Assembly.Library => l.moduleCoord.name != "avro-tools"
+  val filtered = if (dependencies.size > 1) {
+    dependencies.filter {
+      case l: Assembly.Library => !moduleNames.contains(l.moduleCoord.name)
       case _                   => true
     }
-    .map(f => JarEntry(f.target, f.stream))
-  Right(filtered)
+  } else {
+    dependencies
+  }
+
+  if (filtered.nonEmpty) {
+    MergeStrategy.deduplicate.apply(filtered)
+  } else {
+    Right(Vector.empty)
+  }
+}
+
+def preserveName(moduleName: String)(d: Assembly.Dependency): String = d match {
+  case l: Assembly.Library if l.moduleCoord.name == moduleName =>
+    l.target
+  case l: Assembly.Library =>
+    l.target + "_" + l.moduleCoord.name + "-" + l.moduleCoord.version
+  case p: Assembly.Project =>
+    p.target + "_" + p.name
+}
+
+lazy val discardMetaFiles = Set(
+  "DEPENDENCIES",
+  "MANIFEST.MF",
+  "LICENSE",
+  "LICENSE.txt",
+  "LICENSE.md",
+  "INDEX.LIST",
+  "NOTICE.md"
+)
+
+lazy val signedMetaExtensions = Set(".DSA", ".RSA", ".SF")
+
+def discardMeta(f: String): Boolean = {
+  discardMetaFiles.contains(f) || signedMetaExtensions.exists(f.endsWith)
 }
 
 lazy val assemblySettings = Seq(
-  assembly / assemblyMergeStrategy ~= (old => {
-    case PathList("com", "google", "common", _*) =>
-      CustomMergeStrategy("guava")(dependencyFilter)
-    case PathList("com", "google", "protobuf", _*) =>
-      CustomMergeStrategy("protobuf")(dependencyFilter)
-    case PathList("org", "apache", "hadoop", _*) =>
-      CustomMergeStrategy("hadoop")(dependencyFilter)
-    case s if s.endsWith(".properties")           => MergeStrategy.filterDistinctLines
-    case s if s.endsWith("pom.xml")               => MergeStrategy.last
-    case s if s.endsWith(".class")                => MergeStrategy.last
-    case s if s.endsWith("libjansi.jnilib")       => MergeStrategy.last
-    case s if s.endsWith("jansi.dll")             => MergeStrategy.rename
-    case s if s.endsWith("libjansi.so")           => MergeStrategy.rename
-    case s if s.endsWith("libsnappyjava.jnilib")  => MergeStrategy.last
-    case s if s.endsWith("libsnappyjava.so")      => MergeStrategy.last
-    case s if s.endsWith("snappyjava_snappy.dll") => MergeStrategy.last
-    case s if s.endsWith(".dtd")                  => MergeStrategy.rename
-    case s if s.endsWith(".xsd")                  => MergeStrategy.rename
-    case PathList("META-INF", "NOTICE")           =>
-      // avro-tools META-INF/NOTICE must not be renamed
-      CustomMergeStrategy.rename {
-        case l: Assembly.Library if l.moduleCoord.name == "avro-tools" =>
-          l.target
-        case l: Assembly.Library =>
-          l.target + "_" + l.moduleCoord.name + "-" + l.moduleCoord.version
-        case p: Assembly.Project =>
-          p.target + "_" + p.name
-      }
-    case PathList("META-INF", "services", "org.apache.hadoop.fs.FileSystem") =>
+  assembly / assemblyMergeStrategy := {
+    case PathList("javax", "xml", "bind", _*) =>
+      // prefer jakarta over jaxb
+      CustomMergeStrategy("xml")(exclude("jaxb-api", "avro-tools"))
+    case PathList("javax", "ws", "rs", _*) =>
+      // prefer rs-api over jsr311-api
+      CustomMergeStrategy("rs")(exclude("jsr311-api", "avro-tools"))
+    case PathList("org", "apache", "log4j", _*) =>
+      // prefer reload4j over log4j
+      CustomMergeStrategy("log4j")(exclude("log4j", "avro-tools"))
+    case PathList("org", "slf4j", "impl", _*) =>
+      // prefer slf4j-reload4j over slf4j-log4j12
+      CustomMergeStrategy("slf4j-log4j")(exclude("slf4j-log4j12", "avro-tools"))
+    case "log4j.properties" =>
+      MergeStrategy.preferProject
+    case x if x.endsWith(".properties") =>
       MergeStrategy.filterDistinctLines
-    case PathList("META-INF", "LICENSE")               => MergeStrategy.discard
-    case PathList("META-INF", "MANIFEST.MF")           => MergeStrategy.discard
-    case PathList("META-INF", "INDEX.LIST")            => MergeStrategy.discard
-    case PathList("META-INF", s) if s.endsWith(".DSA") => MergeStrategy.discard
-    case PathList("META-INF", s) if s.endsWith(".RSA") => MergeStrategy.discard
-    case PathList("META-INF", s) if s.endsWith(".SF")  => MergeStrategy.discard
-    case _                                             => MergeStrategy.last
-  })
+    case PathList("META-INF", "services", _*) =>
+      MergeStrategy.filterDistinctLines
+    case PathList("META-INF", "NOTICE") =>
+      // avro-tools META-INF/NOTICE must not be renamed
+      CustomMergeStrategy.rename(preserveName("avro-tools"))
+    case PathList("META-INF", "NOTICE.txt") =>
+      MergeStrategy.rename
+    case PathList("NOTICE") =>
+      MergeStrategy.rename
+    case PathList("META-INF", "maven" | "versions", _*) =>
+      MergeStrategy.discard
+    case PathList("META-INF", x) if discardMeta(x) =>
+      MergeStrategy.discard
+    case PathList("module-info.class" | "LICENSE" | "rootdoc.txt") =>
+      MergeStrategy.discard
+    case "com/google/common/flogger/backend/system/DefaultPlatform.class" =>
+      MergeStrategy.first
+    case "META-INF/native-image/io.netty/transport/reflection-config.json" =>
+      MergeStrategy.first
+    case x =>
+      // avro-tools is a fat jar
+      // in case of conflict prefer library from other source
+      CustomMergeStrategy("avro-tools")(exclude("avro-tools"))
+  }
 )
