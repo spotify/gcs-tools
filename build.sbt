@@ -3,7 +3,7 @@ import ReleaseTransformations._
 organization := "com.spotify.data"
 name := "gcs-tools"
 
-val gcsVersion = "hadoop3-2.1.8"
+val gcsVersion = "hadoop3-2.2.8"
 val hadoopVersion = "3.3.3"
 val joptVersion = "5.0.4"
 val avroVersion = "1.11.0"
@@ -12,6 +12,7 @@ val parquetVersion = "1.12.3"
 val protobufVersion = "3.21.1"
 val protobufGenericVersion = "0.2.9"
 val commonsLangVersion = "2.6"
+val guavaVersion = "31.1-jre"
 
 val commonSettings = assemblySettings ++ Seq(
   scalaVersion := "2.13.8",
@@ -57,7 +58,8 @@ lazy val avroTools = project
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
       "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
-    )
+    ),
+    dependencyOverrides += "com.google.guava" % "guava" % guavaVersion
   )
   .dependsOn(shared)
 
@@ -72,7 +74,8 @@ lazy val parquetCli = project
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
       "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
-    )
+    ),
+    dependencyOverrides += "com.google.guava" % "guava" % guavaVersion
   )
   .dependsOn(shared)
 
@@ -90,7 +93,8 @@ lazy val protoTools = project
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
       "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
-    )
+    ),
+    dependencyOverrides += "com.google.guava" % "guava" % guavaVersion
   )
   .dependsOn(shared)
 
@@ -109,9 +113,7 @@ lazy val magnolifyTools = project
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion,
       "com.spotify" %% "magnolify-tools" % magnolifyVersion
     ),
-    dependencyOverrides ++= Seq(
-      "com.google.guava" % "guava" % "29.0-jre"
-    )
+    dependencyOverrides += "com.google.guava" % "guava" % guavaVersion
   )
   .dependsOn(shared)
 
