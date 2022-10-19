@@ -3,5 +3,6 @@
 DIR="$(dirname "$(readlink -f "$0")")"
 NAME="$(basename $0)"
 JAR=$(ls "$DIR" | grep "$NAME-.*.jar" | sort | tail -n 1)
+export GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/application_default_credentials.json
 
 java -jar "$DIR/$JAR" "$@"
