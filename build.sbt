@@ -14,13 +14,14 @@ val protobufGenericVersion = "0.2.9"
 val commonsLangVersion = "2.6"
 
 val commonSettings = assemblySettings ++ Seq(
-  scalaVersion := "2.13.8",
+  crossPaths := false,
   autoScalaLibrary := false,
-  javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
+  javacOptions ++= Seq("--release", "8")
 )
 
 lazy val root = project
   .in(file("."))
+  .settings(commonSettings)
   .settings(
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
