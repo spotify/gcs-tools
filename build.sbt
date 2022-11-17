@@ -3,7 +3,8 @@ import ReleaseTransformations._
 organization := "com.spotify.data"
 name := "gcs-tools"
 
-val gcsVersion = "hadoop3-2.1.8"
+val gcsVersion = "hadoop3-2.2.9"
+val guavaVersion = "31.1-jre" // otherwise android is taken
 val hadoopVersion = "3.3.3"
 val joptVersion = "5.0.4"
 val avroVersion = "1.11.0"
@@ -152,6 +153,10 @@ lazy val discardMetaFiles = Set(
   "LICENSE.md",
   "INDEX.LIST",
   "NOTICE.md"
+)
+
+ThisBuild / dependencyOverrides ++= Seq(
+  "com.google.guava" % "guava" % guavaVersion
 )
 
 lazy val signedMetaExtensions = Set(".DSA", ".RSA", ".SF")
