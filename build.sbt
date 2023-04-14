@@ -10,7 +10,7 @@ val joptVersion = "5.0.4"
 val avroVersion = "1.11.1"
 val magnolifyVersion = "0.6.2"
 val parquetVersion = "1.13.0"
-val protobufVersion = "3.21.12"
+val protobufVersion = "3.22.2"
 val protobufGenericVersion = "0.2.9"
 val commonsLangVersion = "2.6"
 
