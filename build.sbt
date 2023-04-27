@@ -92,7 +92,8 @@ lazy val protoTools = project
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
       "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
-    )
+    ),
+    dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % "2.11.2"
   )
   .dependsOn(shared)
 
