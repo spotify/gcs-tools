@@ -13,7 +13,7 @@ val joptVersion = "5.0.4"
 val magnolifyVersion = "0.6.2"
 val parquetVersion = "1.12.3"
 val protobufGenericVersion = "0.2.9"
-val protobufVersion = "3.22.2"
+val protobufVersion = "3.22.3"
 val scalatestVersion = "3.2.15"
 
 ThisBuild / PB.protocVersion := protobufVersion
