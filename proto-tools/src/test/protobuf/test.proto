@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package proto3;
+
+option java_package = "org.apache.avro.tools";
+
+message Person {
+  string name = 1;
+  int64 age = 2;
+}
