@@ -5,7 +5,7 @@ name := "gcs-tools"
 
 val avroVersion = "1.11.1"
 val commonsLangVersion = "2.6"
-val gcsVersion = "hadoop3-2.1.9"
+val gcsVersion = "hadoop3-2.2.12"
 val guavaVersion = "31.1-jre" // otherwise android is taken
 val hadoopVersion = "3.3.4"
 val jacksonVersion = "2.15.0"
