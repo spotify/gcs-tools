@@ -3,16 +3,30 @@ import ReleaseTransformations._
 organization := "com.spotify.data"
 name := "gcs-tools"
 
+val avroVersion = "1.11.1"
+val commonsLangVersion = "2.6"
 val gcsVersion = "hadoop3-2.1.9"
 val guavaVersion = "31.1-jre" // otherwise android is taken
 val hadoopVersion = "3.3.4"
+val jacksonVersion = "2.15.0"
 val joptVersion = "5.0.4"
-val avroVersion = "1.11.1"
 val magnolifyVersion = "0.6.2"
 val parquetVersion = "1.12.3"
-val protobufVersion = "3.22.2"
 val protobufGenericVersion = "0.2.9"
-val commonsLangVersion = "2.6"
+val protobufVersion = "3.22.2"
+val scalatestVersion = "3.2.15"
+
+ThisBuild / PB.protocVersion := protobufVersion
+lazy val protobufConfigSettings = Def.settings(
+  PB.targets := Seq(
+    PB.gens.java -> (ThisScope.copy(config = Zero) / sourceManaged).value /
+      "compiled_proto" /
+      configuration.value.name,
+  ),
+  managedSourceDirectories ++= PB.targets.value.map(_.outputPath)
+)
+lazy val protobufSettings = Seq(Compile, Test)
+  .flatMap(c => inConfig(c)(protobufConfigSettings))
 
 val commonSettings = assemblySettings ++ Seq(
   scalaVersion := "2.13.10",
@@ -81,6 +95,7 @@ lazy val parquetCli = project
 lazy val protoTools = project
   .in(file("proto-tools"))
   .settings(commonSettings)
+  .settings(protobufSettings)
   .settings(
     assembly / mainClass := Some("org.apache.avro.tool.ProtoMain"),
     assembly / assemblyJarName := s"proto-tools-$protobufVersion.jar",
@@ -91,7 +106,8 @@ lazy val protoTools = project
       "org.apache.avro" % "avro-mapred" % avroVersion,
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
       "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
-      "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion
+      "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion,
+      "org.scalatest" %% "scalatest" % scalatestVersion % Test
     )
   )
   .dependsOn(shared)
@@ -156,7 +172,17 @@ lazy val discardMetaFiles = Set(
 )
 
 ThisBuild / dependencyOverrides ++= Seq(
-  "com.google.guava" % "guava" % guavaVersion
+  // force jre version
+  "com.google.guava" % "guava" % guavaVersion,
+  // sync all jackson versions
+  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-base" % jacksonVersion,
+  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-json-provider" % jacksonVersion,
+  "com.fasterxml.jackson.module" % "jackson-module-jaxb-annotations" % jacksonVersion,
+  "com.fasterxml.jackson.module" % "jackson-module-paranamer" % jacksonVersion,
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
 )
 
 lazy val signedMetaExtensions = Set(".DSA", ".RSA", ".SF")
