@@ -32,36 +32,32 @@ class ProtoToolsSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
 
   import ProtoToolsSpec._
 
+  val data = List(
+    Test.Person.newBuilder().setName("Bob").setAge(25).build(),
+    Test.Person.newBuilder().setName("Alice").setAge(27).build()
+  )
+
   private def createTestData(): File = {
-    val file = Files.createTempFile("proto-tools", ".proto.avro")
-
-    val protoData = List(
-      Test.Person.newBuilder().setName("Bob").setAge(25).build(),
-      Test.Person.newBuilder().setName("Alice").setAge(27).build()
-    )
-
-    val avroData = protoData
-      .map(p =>
-        new GenericData.Record(ProtobufAvroSchema)
-          .tap(_.put("bytes", ByteBuffer.wrap(p.toByteArray)))
-      )
-
+    val file = Files.createTempFile("proto-tools", ".proto.avro").toFile
     val datumWriter = new GenericDatumWriter[GenericRecord](ProtobufAvroSchema)
-    val dataFileWriter = new DataFileWriter[GenericRecord](datumWriter)
+    val dataFileWriter = new DataFileWriter(datumWriter)
     dataFileWriter.setMeta(
       "protobuf.generic.schema",
       protobuf.generic.Schema.of[Test.Person].toJson
     )
-    dataFileWriter.create(ProtobufAvroSchema, file.toFile)
-    avroData.foreach(dataFileWriter.append)
+    dataFileWriter.create(ProtobufAvroSchema, file)
+    val avroRecord = new GenericData.Record(ProtobufAvroSchema)
+    data.foreach { p =>
+      avroRecord.put("bytes", ByteBuffer.wrap(p.toByteArray))
+      dataFileWriter.append(avroRecord)
+    }
     dataFileWriter.close()
-
-    file.toFile
+    file
   }
 
   private var protoFile: File = _
 
-  def withOutputs(testCode: (ByteArrayOutputStream, ByteArrayOutputStream) => Any) {
+  def withOutputs(testCode: (ByteArrayOutputStream, ByteArrayOutputStream) => Any): Unit = {
     val out = new ByteArrayOutputStream()
     val err = new ByteArrayOutputStream()
     try {

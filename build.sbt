@@ -125,7 +125,9 @@ lazy val magnolifyTools = project
       "org.apache.hadoop" % "hadoop-common" % hadoopVersion,
       "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion,
-      "com.spotify" %% "magnolify-tools" % magnolifyVersion
+      "com.spotify" %% "magnolify-tools" % magnolifyVersion,
+      "org.scalatest" %% "scalatest" % scalatestVersion % Test,
+      "org.apache.parquet" % "parquet-avro" % parquetVersion % Test,
     ),
     dependencyOverrides ++= Seq(
       "com.google.guava" % "guava" % "29.0-jre"
