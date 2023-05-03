@@ -135,6 +135,21 @@ lazy val magnolifyTools = project
   )
   .dependsOn(shared)
 
+ThisBuild / dependencyOverrides ++= Seq(
+  // force jre version
+  "com.google.guava" % "guava" % guavaVersion,
+  // sync all jackson versions
+  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-base" % jacksonVersion,
+  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-json-provider" % jacksonVersion,
+  "com.fasterxml.jackson.module" % "jackson-module-jaxb-annotations" % jacksonVersion,
+  "com.fasterxml.jackson.module" % "jackson-module-paranamer" % jacksonVersion,
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
+)
+
+// assembly
 def exclude(moduleNames: String*)(
     dependencies: Vector[Assembly.Dependency]
 ): Either[String, Vector[Assembly.JarEntry]] = {
@@ -173,24 +188,10 @@ lazy val discardMetaFiles = Set(
   "NOTICE.md"
 )
 
-ThisBuild / dependencyOverrides ++= Seq(
-  // force jre version
-  "com.google.guava" % "guava" % guavaVersion,
-  // sync all jackson versions
-  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
-  "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
-  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-base" % jacksonVersion,
-  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-json-provider" % jacksonVersion,
-  "com.fasterxml.jackson.module" % "jackson-module-jaxb-annotations" % jacksonVersion,
-  "com.fasterxml.jackson.module" % "jackson-module-paranamer" % jacksonVersion,
-  "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
-)
-
 lazy val signedMetaExtensions = Set(".DSA", ".RSA", ".SF")
 
 def discardMeta(f: String): Boolean = {
-  discardMetaFiles.contains(f) || signedMetaExtensions.exists(f.endsWith)
+  discardMetaFiles.contains(f) || signedMetaExtensions.exists(f.endsWith) || f.endsWith(".kotlin_module")
 }
 
 lazy val assemblySettings = Seq(
