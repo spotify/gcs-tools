@@ -13,7 +13,7 @@ val joptVersion = "5.0.4"
 val magnolifyVersion = "0.6.2"
 val parquetVersion = "1.13.0"
 val protobufGenericVersion = "0.2.9"
-val protobufVersion = "3.22.3"
+val protobufVersion = "3.22.4"
 val scalatestVersion = "3.2.15"
 
 ThisBuild / PB.protocVersion := protobufVersion
@@ -21,7 +21,7 @@ lazy val protobufConfigSettings = Def.settings(
   PB.targets := Seq(
     PB.gens.java -> (ThisScope.copy(config = Zero) / sourceManaged).value /
       "compiled_proto" /
-      configuration.value.name,
+      configuration.value.name
   ),
   managedSourceDirectories ++= PB.targets.value.map(_.outputPath)
 )
@@ -127,7 +127,7 @@ lazy val magnolifyTools = project
       "com.google.cloud.bigdataoss" % "gcs-connector" % gcsVersion,
       "com.spotify" %% "magnolify-tools" % magnolifyVersion,
       "org.scalatest" %% "scalatest" % scalatestVersion % Test,
-      "org.apache.parquet" % "parquet-avro" % parquetVersion % Test,
+      "org.apache.parquet" % "parquet-avro" % parquetVersion % Test
     ),
     dependencyOverrides ++= Seq(
       "com.google.guava" % "guava" % "29.0-jre"
@@ -146,12 +146,12 @@ ThisBuild / dependencyOverrides ++= Seq(
   "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-json-provider" % jacksonVersion,
   "com.fasterxml.jackson.module" % "jackson-module-jaxb-annotations" % jacksonVersion,
   "com.fasterxml.jackson.module" % "jackson-module-paranamer" % jacksonVersion,
-  "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion
 )
 
 // assembly
 def exclude(moduleNames: String*)(
-    dependencies: Vector[Assembly.Dependency]
+  dependencies: Vector[Assembly.Dependency]
 ): Either[String, Vector[Assembly.JarEntry]] = {
   val filtered = if (dependencies.size > 1) {
     dependencies.filter {
@@ -190,9 +190,10 @@ lazy val discardMetaFiles = Set(
 
 lazy val signedMetaExtensions = Set(".DSA", ".RSA", ".SF")
 
-def discardMeta(f: String): Boolean = {
-  discardMetaFiles.contains(f) || signedMetaExtensions.exists(f.endsWith) || f.endsWith(".kotlin_module")
-}
+def discardMeta(f: String): Boolean =
+  discardMetaFiles.contains(f) || signedMetaExtensions.exists(f.endsWith) || f.endsWith(
+    ".kotlin_module"
+  )
 
 lazy val assemblySettings = Seq(
   assembly / assemblyMergeStrategy := {
