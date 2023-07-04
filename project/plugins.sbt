@@ -4,4 +4,4 @@ addSbtPlugin("com.github.sbt" % "sbt-release" % "1.1.0")
 addSbtPlugin("com.github.sbt" % "sbt-avro" % "3.4.2")
 addSbtPlugin("com.thesamet" % "sbt-protoc" % "1.0.6")
 
-libraryDependencies += "org.apache.avro" % "avro-compiler" % "1.11.1"
+libraryDependencies += "org.apache.avro" % "avro-compiler" % "1.11.2"
