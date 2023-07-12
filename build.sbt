@@ -3,7 +3,7 @@ import ReleaseTransformations._
 organization := "com.spotify.data"
 name := "gcs-tools"
 
-val avroVersion = "1.11.1"
+val avroVersion = "1.11.2"
 val commonsLangVersion = "2.6"
 val gcsVersion = "hadoop3-2.2.12"
 val guavaVersion = "31.1-jre" // otherwise android is taken
