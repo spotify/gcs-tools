@@ -110,6 +110,7 @@ lazy val `proto-tools` = project
       "me.lyh" %% "protobuf-generic" % protobufGenericVersion,
       "net.sf.jopt-simple" % "jopt-simple" % joptVersion,
       "org.apache.avro" % "avro-mapred" % avroVersion,
+      "org.scalatest" %% "scalatest" % scalatestVersion % Test
     )
   )
 
@@ -125,7 +126,9 @@ lazy val `magnolify-tools` = project
       "net.sf.jopt-simple" % "jopt-simple" % joptVersion,
       "org.apache.avro" % "avro" % avroVersion,
       "org.apache.parquet" % "parquet-hadoop" % parquetVersion,
-      "org.scala-lang" % "scala-reflect" % scalaVersion.value
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+      "org.scalatest" %% "scalatest" % scalatestVersion % Test,
+      "org.apache.parquet" % "parquet-avro" % parquetVersion % Test
     )
   )
 
