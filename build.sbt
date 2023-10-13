@@ -3,17 +3,17 @@ import ReleaseTransformations._
 organization := "com.spotify.data"
 name := "gcs-tools"
 
-val avroVersion = "1.11.2"
+val avroVersion = "1.11.3"
 val commonsLangVersion = "2.6"
 val gcsVersion = "hadoop3-2.2.16"
 val guavaVersion = "31.1-jre" // otherwise android is taken
 val hadoopVersion = "3.3.6"
 val jacksonVersion = "2.15.0"
 val joptVersion = "5.0.4"
-val magnolifyVersion = "0.6.2"
+val magnolifyVersion = "0.6.3"
 val parquetVersion = "1.13.1"
 val protobufGenericVersion = "0.2.9"
-val protobufVersion = "3.23.4"
+val protobufVersion = "3.24.4"
 val scalatestVersion = "3.2.16"
 
 ThisBuild / PB.protocVersion := protobufVersion
