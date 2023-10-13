@@ -197,9 +197,6 @@ lazy val assemblySettings = Seq(
     case PathList("javax", "xml", "bind", _*) =>
       // prefer jakarta over jaxb
       CustomMergeStrategy("xml")(exclude("jaxb-api", "avro-tools"))
-    case PathList("javax", "ws", "rs", _*) =>
-      // prefer rs-api over jsr311-api
-      CustomMergeStrategy("rs")(exclude("jsr311-api", "avro-tools"))
     case PathList("org", "apache", "log4j", _*) =>
       // prefer reload4j over log4j
       CustomMergeStrategy("log4j")(exclude("log4j", "avro-tools"))
@@ -223,12 +220,8 @@ lazy val assemblySettings = Seq(
       MergeStrategy.discard
     case PathList("META-INF", x) if discardMeta(x) =>
       MergeStrategy.discard
-    case PathList("module-info.class" | "LICENSE" | "rootdoc.txt") =>
+    case PathList("module-info.class" | "LICENSE") =>
       MergeStrategy.discard
-    case "com/google/common/flogger/backend/system/DefaultPlatform.class" =>
-      MergeStrategy.first
-    case "META-INF/native-image/io.netty/transport/reflection-config.json" =>
-      MergeStrategy.first
     case x =>
       // avro-tools is a fat jar
       // in case of conflict prefer library from other source
