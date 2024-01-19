@@ -9,10 +9,10 @@ val guavaVersion = "31.1-jre" // otherwise android is taken
 val hadoopVersion = "3.3.6"
 val jacksonVersion = "2.15.0"
 val joptVersion = "5.0.4"
-val magnolifyVersion = "0.6.4"
+val magnolifyVersion = "0.7.0"
 val parquetVersion = "1.13.1"
 val protobufGenericVersion = "0.2.9"
-val protobufVersion = "3.25.1"
+val protobufVersion = "3.25.2"
 val scalatestVersion = "3.2.17"
 
 ThisBuild / PB.protocVersion := protobufVersion
