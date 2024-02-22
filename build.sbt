@@ -13,7 +13,7 @@ val magnolifyVersion = "0.7.0"
 val parquetVersion = "1.13.1"
 val protobufGenericVersion = "0.2.9"
 val protobufVersion = "3.25.2"
-val scalatestVersion = "3.2.17"
+val scalatestVersion = "3.2.18"
 
 ThisBuild / PB.protocVersion := protobufVersion
 lazy val protobufConfigSettings = Def.settings(
