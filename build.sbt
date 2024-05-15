@@ -14,6 +14,11 @@ val parquetVersion = "1.13.1"
 val protobufGenericVersion = "0.2.9"
 val protobufVersion = "4.26.1"
 val scalatestVersion = "3.2.18"
+val slf4jReload4jVersion = "2.0.13"
+
+// use slf4j-reload4j instead
+lazy val excludeLog4j = ExclusionRule("log4j", "log4j")
+lazy val excludeSlf4jLog4j12 = ExclusionRule("org.slf4j", "slf4j-log4j12")
 
 ThisBuild / PB.protocVersion := protobufVersion
 lazy val protobufConfigSettings = Def.settings(
@@ -66,14 +71,15 @@ lazy val shared = project
       "com.google.cloud.bigdataoss" % "gcsio" % gcsConnectorVersion,
       "com.google.cloud.bigdataoss" % "util-hadoop" % gcsConnectorVersion,
       "com.google.cloud.bigdataoss" % "util" % gcsConnectorVersion,
-      "org.apache.hadoop" % "hadoop-client" % hadoopVersion,
-      "org.apache.hadoop" % "hadoop-common" % hadoopVersion
+      "org.apache.hadoop" % "hadoop-client" % hadoopVersion excludeAll (excludeLog4j, excludeSlf4jLog4j12),
+      "org.apache.hadoop" % "hadoop-common" % hadoopVersion excludeAll (excludeLog4j, excludeSlf4jLog4j12),
+      "org.slf4j" % "slf4j-reload4j" % slf4jReload4jVersion % Runtime
     )
   )
 
 lazy val `avro-tools` = project
   .in(file("avro-tools"))
-  .dependsOn(shared)
+  .dependsOn(shared % "compile->compile;runtime->runtime")
   .settings(commonSettings)
   .settings(
     autoScalaLibrary := false,
@@ -86,7 +92,7 @@ lazy val `avro-tools` = project
 
 lazy val `parquet-cli` = project
   .in(file("parquet-cli"))
-  .dependsOn(shared)
+  .dependsOn(shared % "compile->compile;runtime->runtime")
   .settings(commonSettings)
   .settings(
     autoScalaLibrary := false,
@@ -99,7 +105,7 @@ lazy val `parquet-cli` = project
 
 lazy val `proto-tools` = project
   .in(file("proto-tools"))
-  .dependsOn(shared)
+  .dependsOn(shared % "compile->compile;runtime->runtime")
   .settings(commonSettings)
   .settings(protobufSettings)
   .settings(
@@ -116,7 +122,7 @@ lazy val `proto-tools` = project
 
 lazy val `magnolify-tools` = project
   .in(file("magnolify-tools"))
-  .dependsOn(shared)
+  .dependsOn(shared % "compile->compile;runtime->runtime")
   .settings(commonSettings)
   .settings(
     assembly / mainClass := Some("magnolify.tools.Main"),
