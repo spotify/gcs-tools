@@ -32,9 +32,15 @@ lazy val protobufConfigSettings = Def.settings(
 lazy val protobufSettings = Seq(Compile, Test)
   .flatMap(c => inConfig(c)(protobufConfigSettings))
 
-val commonSettings = assemblySettings ++ Seq(
+val commonSettings = Seq(
   scalaVersion := "2.13.14",
   javacOptions ++= Seq("--release", "8")
+)
+
+val toolsSettings = assemblySettings ++ Seq(
+  libraryDependencies ++= Seq(
+    "org.slf4j" % "slf4j-reload4j" % slf4jReload4jVersion % Runtime
+  )
 )
 
 lazy val root = project
@@ -72,8 +78,7 @@ lazy val shared = project
       "com.google.cloud.bigdataoss" % "util-hadoop" % gcsConnectorVersion,
       "com.google.cloud.bigdataoss" % "util" % gcsConnectorVersion,
       "org.apache.hadoop" % "hadoop-client" % hadoopVersion excludeAll (excludeLog4j, excludeSlf4jLog4j12),
-      "org.apache.hadoop" % "hadoop-common" % hadoopVersion excludeAll (excludeLog4j, excludeSlf4jLog4j12),
-      "org.slf4j" % "slf4j-reload4j" % slf4jReload4jVersion % Runtime
+      "org.apache.hadoop" % "hadoop-common" % hadoopVersion excludeAll (excludeLog4j, excludeSlf4jLog4j12)
     )
   )
 
@@ -81,6 +86,7 @@ lazy val `avro-tools` = project
   .in(file("avro-tools"))
   .dependsOn(shared % "compile->compile;runtime->runtime")
   .settings(commonSettings)
+  .settings(toolsSettings)
   .settings(
     autoScalaLibrary := false,
     assembly / mainClass := Some("org.apache.avro.tool.Main"),
@@ -92,8 +98,9 @@ lazy val `avro-tools` = project
 
 lazy val `parquet-cli` = project
   .in(file("parquet-cli"))
-  .dependsOn(shared % "compile->compile;runtime->runtime")
+  .dependsOn(shared)
   .settings(commonSettings)
+  .settings(toolsSettings)
   .settings(
     autoScalaLibrary := false,
     assembly / mainClass := Some("org.apache.parquet.cli.Main"),
@@ -105,8 +112,9 @@ lazy val `parquet-cli` = project
 
 lazy val `proto-tools` = project
   .in(file("proto-tools"))
-  .dependsOn(shared % "compile->compile;runtime->runtime")
+  .dependsOn(shared)
   .settings(commonSettings)
+  .settings(toolsSettings)
   .settings(protobufSettings)
   .settings(
     assembly / mainClass := Some("org.apache.avro.tool.ProtoMain"),
@@ -122,8 +130,9 @@ lazy val `proto-tools` = project
 
 lazy val `magnolify-tools` = project
   .in(file("magnolify-tools"))
-  .dependsOn(shared % "compile->compile;runtime->runtime")
+  .dependsOn(shared)
   .settings(commonSettings)
+  .settings(toolsSettings)
   .settings(
     assembly / mainClass := Some("magnolify.tools.Main"),
     assembly / assemblyJarName := s"magnolify-tools-$magnolifyVersion.jar",
