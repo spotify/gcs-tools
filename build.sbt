@@ -77,8 +77,14 @@ lazy val shared = project
       "com.google.cloud.bigdataoss" % "gcsio" % gcsConnectorVersion,
       "com.google.cloud.bigdataoss" % "util-hadoop" % gcsConnectorVersion,
       "com.google.cloud.bigdataoss" % "util" % gcsConnectorVersion,
-      "org.apache.hadoop" % "hadoop-client" % hadoopVersion excludeAll (excludeLog4j, excludeSlf4jLog4j12),
-      "org.apache.hadoop" % "hadoop-common" % hadoopVersion excludeAll (excludeLog4j, excludeSlf4jLog4j12)
+      "org.apache.hadoop" % "hadoop-client" % hadoopVersion excludeAll (
+        excludeLog4j,
+        excludeSlf4jLog4j12
+      ),
+      "org.apache.hadoop" % "hadoop-common" % hadoopVersion excludeAll (
+        excludeLog4j,
+        excludeSlf4jLog4j12
+      )
     )
   )
 
