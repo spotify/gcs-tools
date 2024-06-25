@@ -13,7 +13,7 @@ val magnolifyVersion = "0.7.3"
 val parquetVersion = "1.14.0"
 val protobufGenericVersion = "0.2.9"
 val protobufVersion = "4.27.1"
-val scalatestVersion = "3.2.18"
+val scalatestVersion = "3.2.19"
 val slf4jReload4jVersion = "2.0.13"
 
 // use slf4j-reload4j instead
