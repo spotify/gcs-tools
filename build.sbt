@@ -10,9 +10,9 @@ val hadoopVersion = "3.3.6"
 val jacksonVersion = "2.15.0"
 val joptVersion = "5.0.4"
 val magnolifyVersion = "0.7.3"
-val parquetVersion = "1.14.0"
+val parquetVersion = "1.14.1"
 val protobufGenericVersion = "0.2.9"
-val protobufVersion = "4.27.1"
+val protobufVersion = "4.27.2"
 val scalatestVersion = "3.2.19"
 val slf4jReload4jVersion = "2.0.13"
 
@@ -77,8 +77,14 @@ lazy val shared = project
       "com.google.cloud.bigdataoss" % "gcsio" % gcsConnectorVersion,
       "com.google.cloud.bigdataoss" % "util-hadoop" % gcsConnectorVersion,
       "com.google.cloud.bigdataoss" % "util" % gcsConnectorVersion,
-      "org.apache.hadoop" % "hadoop-client" % hadoopVersion excludeAll (excludeLog4j, excludeSlf4jLog4j12),
-      "org.apache.hadoop" % "hadoop-common" % hadoopVersion excludeAll (excludeLog4j, excludeSlf4jLog4j12)
+      "org.apache.hadoop" % "hadoop-client" % hadoopVersion excludeAll (
+        excludeLog4j,
+        excludeSlf4jLog4j12
+      ),
+      "org.apache.hadoop" % "hadoop-common" % hadoopVersion excludeAll (
+        excludeLog4j,
+        excludeSlf4jLog4j12
+      )
     )
   )
 
