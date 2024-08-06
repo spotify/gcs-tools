@@ -12,7 +12,7 @@ val joptVersion = "5.0.4"
 val magnolifyVersion = "0.7.3"
 val parquetVersion = "1.14.1"
 val protobufGenericVersion = "0.2.9"
-val protobufVersion = "4.27.2"
+val protobufVersion = "4.27.3"
 val scalatestVersion = "3.2.19"
 val slf4jReload4jVersion = "2.0.13"
 
