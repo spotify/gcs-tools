@@ -14,7 +14,7 @@ val parquetVersion = "1.14.1"
 val protobufGenericVersion = "0.2.9"
 val protobufVersion = "4.27.2"
 val scalatestVersion = "3.2.19"
-val slf4jReload4jVersion = "2.0.13"
+val slf4jReload4jVersion = "2.0.16"
 
 // use slf4j-reload4j instead
 lazy val excludeLog4j = ExclusionRule("log4j", "log4j")
