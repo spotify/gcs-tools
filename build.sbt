@@ -1,4 +1,5 @@
-import ReleaseTransformations._
+import ReleaseTransformations.*
+import sbt.OutputStrategy
 
 organization := "com.spotify.data"
 name := "gcs-tools"
@@ -10,11 +11,12 @@ val hadoopVersion = "3.3.6"
 val jacksonVersion = "2.15.0"
 val joptVersion = "5.0.4"
 val magnolifyVersion = "0.7.4"
-val parquetVersion = "1.14.2"
+val parquetVersion = "1.13.1" // scala-steward:off Wait fix https://github.com/apache/parquet-java/issues/3016
 val protobufGenericVersion = "0.2.9"
 val protobufVersion = "4.28.1"
 val scalatestVersion = "3.2.19"
-val slf4jReload4jVersion = "2.0.16"
+val slf4jReload4jVersion2 = "2.0.16"
+val slf4jReload4jVersion1 = "1.7.36" // scala-steward:off
 
 // use slf4j-reload4j instead
 lazy val excludeLog4j = ExclusionRule("log4j", "log4j")
@@ -34,13 +36,9 @@ lazy val protobufSettings = Seq(Compile, Test)
 
 val commonSettings = Seq(
   scalaVersion := "2.13.14",
-  javacOptions ++= Seq("--release", "8")
-)
-
-val toolsSettings = assemblySettings ++ Seq(
-  libraryDependencies ++= Seq(
-    "org.slf4j" % "slf4j-reload4j" % slf4jReload4jVersion % Runtime
-  )
+  javacOptions ++= Seq("--release", "8"),
+  fork := true,
+  Test / outputStrategy := Some(OutputStrategy.StdoutOutput),
 )
 
 lazy val root = project
@@ -92,13 +90,15 @@ lazy val `avro-tools` = project
   .in(file("avro-tools"))
   .dependsOn(shared % "compile->compile;runtime->runtime")
   .settings(commonSettings)
-  .settings(toolsSettings)
+  .settings(assemblySettings)
   .settings(
     autoScalaLibrary := false,
     assembly / mainClass := Some("org.apache.avro.tool.Main"),
     assembly / assemblyJarName := s"avro-tools-$avroVersion.jar",
     libraryDependencies ++= Seq(
-      "org.apache.avro" % "avro-tools" % avroVersion
+      "org.apache.avro" % "avro-tools" % avroVersion,
+      "org.slf4j" % "slf4j-reload4j" % slf4jReload4jVersion2 % Runtime,
+      "org.scalatest" %% "scalatest" % scalatestVersion % Test
     )
   )
 
@@ -106,13 +106,15 @@ lazy val `parquet-cli` = project
   .in(file("parquet-cli"))
   .dependsOn(shared)
   .settings(commonSettings)
-  .settings(toolsSettings)
+  .settings(assemblySettings)
   .settings(
     autoScalaLibrary := false,
     assembly / mainClass := Some("org.apache.parquet.cli.Main"),
     assembly / assemblyJarName := s"parquet-cli-$parquetVersion.jar",
     libraryDependencies ++= Seq(
-      "org.apache.parquet" % "parquet-cli" % parquetVersion
+      "org.apache.parquet" % "parquet-cli" % parquetVersion,
+      "org.slf4j" % "slf4j-reload4j" % slf4jReload4jVersion1 % Runtime,
+      "org.scalatest" %% "scalatest" % scalatestVersion % Test
     )
   )
 
@@ -120,7 +122,7 @@ lazy val `proto-tools` = project
   .in(file("proto-tools"))
   .dependsOn(shared)
   .settings(commonSettings)
-  .settings(toolsSettings)
+  .settings(assemblySettings)
   .settings(protobufSettings)
   .settings(
     assembly / mainClass := Some("org.apache.avro.tool.ProtoMain"),
@@ -130,6 +132,7 @@ lazy val `proto-tools` = project
       "me.lyh" %% "protobuf-generic" % protobufGenericVersion,
       "net.sf.jopt-simple" % "jopt-simple" % joptVersion,
       "org.apache.avro" % "avro-mapred" % avroVersion,
+      "org.slf4j" % "slf4j-reload4j" % slf4jReload4jVersion2 % Runtime,
       "org.scalatest" %% "scalatest" % scalatestVersion % Test
     )
   )
@@ -138,7 +141,7 @@ lazy val `magnolify-tools` = project
   .in(file("magnolify-tools"))
   .dependsOn(shared)
   .settings(commonSettings)
-  .settings(toolsSettings)
+  .settings(assemblySettings)
   .settings(
     assembly / mainClass := Some("magnolify.tools.Main"),
     assembly / assemblyJarName := s"magnolify-tools-$magnolifyVersion.jar",
