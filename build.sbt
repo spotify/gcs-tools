@@ -11,9 +11,10 @@ val hadoopVersion = "3.3.6"
 val jacksonVersion = "2.15.0"
 val joptVersion = "5.0.4"
 val magnolifyVersion = "0.7.4"
-val parquetVersion = "1.13.1" // scala-steward:off Wait fix https://github.com/apache/parquet-java/issues/3016
+val parquetVersion =
+  "1.13.1" // scala-steward:off Wait fix https://github.com/apache/parquet-java/issues/3016
 val protobufGenericVersion = "0.2.9"
-val protobufVersion = "4.28.1"
+val protobufVersion = "4.28.2"
 val scalatestVersion = "3.2.19"
 val slf4jReload4jVersion2 = "2.0.16"
 val slf4jReload4jVersion1 = "1.7.36" // scala-steward:off
@@ -38,7 +39,7 @@ val commonSettings = Seq(
   scalaVersion := "2.13.14",
   javacOptions ++= Seq("--release", "8"),
   fork := true,
-  Test / outputStrategy := Some(OutputStrategy.StdoutOutput),
+  Test / outputStrategy := Some(OutputStrategy.StdoutOutput)
 )
 
 lazy val root = project
