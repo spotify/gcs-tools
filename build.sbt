@@ -237,7 +237,7 @@ lazy val assemblySettings = Seq(
     case PathList("META-INF", "NOTICE") =>
       // avro-tools META-INF/NOTICE must not be renamed
       CustomMergeStrategy.rename(preserveName("avro-tools"))
-    case PathList("META-INF", "NOTICE.txt") =>
+    case PathList("META-INF", "NOTICE.txt" | "FastDoubleParser-NOTICE") =>
       MergeStrategy.rename
     case PathList("NOTICE") =>
       MergeStrategy.rename
