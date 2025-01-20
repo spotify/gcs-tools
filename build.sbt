@@ -140,10 +140,12 @@ lazy val `proto-tools` = project
 
 lazy val `magnolify-tools` = project
   .in(file("magnolify-tools"))
+  .enablePlugins(SbtAvro)
   .dependsOn(shared)
   .settings(commonSettings)
   .settings(assemblySettings)
   .settings(
+    SbtAvro.autoImport.avroVersion := avroVersion,
     assembly / mainClass := Some("magnolify.tools.Main"),
     assembly / assemblyJarName := s"magnolify-tools-$magnolifyVersion.jar",
     libraryDependencies ++= Seq(
