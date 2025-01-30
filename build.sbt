@@ -11,8 +11,7 @@ val hadoopVersion = "3.3.6"
 val jacksonVersion = "2.18.2"
 val joptVersion = "5.0.4"
 val magnolifyVersion = "0.7.4"
-val parquetVersion =
-  "1.13.1" // scala-steward:off Wait fix https://github.com/apache/parquet-java/issues/3016
+val parquetVersion = "1.15.0"
 val protobufGenericVersion = "0.2.9"
 val protobufVersion = "4.29.3"
 val scalatestVersion = "3.2.19"
