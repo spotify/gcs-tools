@@ -15,7 +15,7 @@ val parquetVersion = "1.15.2"
 val protobufGenericVersion = "0.2.9"
 val protobufVersion = "4.29.3"
 val scalatestVersion = "3.2.19"
-val slf4jReload4jVersion2 = "2.0.16"
+val slf4jReload4jVersion2 = "2.0.17"
 val slf4jReload4jVersion1 = "1.7.36" // scala-steward:off
 
 // use slf4j-reload4j instead
