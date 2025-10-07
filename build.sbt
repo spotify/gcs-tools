@@ -35,7 +35,7 @@ lazy val protobufSettings = Seq(Compile, Test)
   .flatMap(c => inConfig(c)(protobufConfigSettings))
 
 val commonSettings = Seq(
-  scalaVersion := "2.13.16",
+  scalaVersion := "2.13.17",
   javacOptions ++= Seq("--release", "8"),
   fork := true,
   Test / outputStrategy := Some(OutputStrategy.StdoutOutput)
