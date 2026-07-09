@@ -5,17 +5,17 @@ organization := "com.spotify.data"
 name := "gcs-tools"
 
 val avroVersion = "1.12.0"
-val gcsConnectorVersion = "3.0.1"
-val guavaVersion = "33.4.0-jre" // otherwise android is taken
-val hadoopVersion = "3.3.6"
-val jacksonVersion = "2.18.2"
+val gcsConnectorVersion = "3.1.17"
+val guavaVersion = "33.4.8-jre" // otherwise android is taken
+val hadoopVersion = "3.5.0"
+val jacksonVersion = "2.19.0"
 val joptVersion = "5.0.4"
-val magnolifyVersion = "0.7.4"
-val parquetVersion = "1.15.2"
+val magnolifyVersion = "0.8.0"
+val parquetVersion = "1.17.1"
 val protobufGenericVersion = "0.2.9"
-val protobufVersion = "4.29.3"
+val protobufVersion = "4.35.0"
 val scalatestVersion = "3.2.19"
-val slf4jReload4jVersion2 = "2.0.16"
+val slf4jReload4jVersion2 = "2.0.17"
 val slf4jReload4jVersion1 = "1.7.36" // scala-steward:off
 
 // use slf4j-reload4j instead
