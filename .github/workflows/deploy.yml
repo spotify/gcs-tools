@@ -12,11 +12,11 @@ jobs:
           uses: actions/checkout@v4
         - name: Cache SBT
           uses: coursier/cache-action@v6
-        - name: Java 11 setup
+        - name: Java 25 setup
           uses: actions/setup-java@v4
           with:
             distribution: corretto
-            java-version: 11
+            java-version: 25
         - run: sbt assembly
         - name: Upload Jars
           uses: softprops/action-gh-release@v1
