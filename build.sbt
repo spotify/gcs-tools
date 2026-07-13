@@ -238,7 +238,7 @@ lazy val assemblySettings = Seq(
     case PathList("META-INF", "NOTICE") =>
       // avro-tools META-INF/NOTICE must not be renamed
       CustomMergeStrategy.rename(preserveName("avro-tools"))
-    case PathList("META-INF", "NOTICE.txt" | "FastDoubleParser-NOTICE") =>
+    case PathList("META-INF", "NOTICE.txt" | "NOTICE.markdown" | "FastDoubleParser-NOTICE" | "FastDoubleParser-LICENSE") =>
       MergeStrategy.rename
     case PathList("NOTICE") =>
       MergeStrategy.rename
@@ -248,6 +248,18 @@ lazy val assemblySettings = Seq(
       MergeStrategy.discard
     case PathList("module-info.class" | "LICENSE") =>
       MergeStrategy.discard
+    case PathList("javax", "servlet", _*) =>
+      CustomMergeStrategy("servlet")(exclude("javax.servlet-api", "avro-tools"))
+    case PathList("javax", "annotation", _*) =>
+      CustomMergeStrategy("annotation")(exclude("javax.annotation-api", "avro-tools"))
+    case PathList("org", "aopalliance", _*) =>
+      CustomMergeStrategy("aopalliance")(exclude("aopalliance-repackaged"))
+    case PathList("org", "apache", "hadoop", "yarn", _*) =>
+      CustomMergeStrategy("yarn")(exclude("hadoop-yarn-common", "avro-tools"))
+    case PathList("org", "apache", "hadoop", "security", "authentication", _*) =>
+      CustomMergeStrategy("hadoop-auth")(exclude("hadoop-auth", "avro-tools"))
+    case PathList("org", "jspecify", _*) =>
+      CustomMergeStrategy("jspecify")(exclude("hadoop-shaded-guava"))
     case x =>
       // avro-tools is a fat jar
       // in case of conflict prefer library from other source
