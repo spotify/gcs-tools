@@ -7,7 +7,7 @@ name := "gcs-tools"
 val avroVersion = "1.12.0"
 val gcsConnectorVersion = "3.1.17"
 val guavaVersion = "33.4.8-jre" // otherwise android is taken
-val hadoopVersion = "3.5.0"
+val hadoopVersion = "3.4.3"
 val jacksonVersion = "2.19.0"
 val joptVersion = "5.0.4"
 val magnolifyVersion = "0.8.0"
@@ -16,7 +16,6 @@ val protobufGenericVersion = "0.2.9"
 val protobufVersion = "4.35.0"
 val scalatestVersion = "3.2.19"
 val slf4jReload4jVersion2 = "2.0.17"
-val slf4jReload4jVersion1 = "1.7.36" // scala-steward:off
 
 // use slf4j-reload4j instead
 lazy val excludeLog4j = ExclusionRule("log4j", "log4j")
@@ -113,7 +112,7 @@ lazy val `parquet-cli` = project
     assembly / assemblyJarName := s"parquet-cli-$parquetVersion.jar",
     libraryDependencies ++= Seq(
       "org.apache.parquet" % "parquet-cli" % parquetVersion,
-      "org.slf4j" % "slf4j-reload4j" % slf4jReload4jVersion1 % Runtime,
+      "org.slf4j" % "slf4j-reload4j" % slf4jReload4jVersion2 % Runtime,
       "org.scalatest" %% "scalatest" % scalatestVersion % Test
     )
   )
@@ -233,6 +232,10 @@ lazy val assemblySettings = Seq(
       MergeStrategy.preferProject
     case x if x.endsWith(".properties") =>
       MergeStrategy.filterDistinctLines
+    case PathList("META-INF", "services", "java.net.spi.InetAddressResolverProvider") =>
+      // dnsjava provides this via multi-release jar (META-INF/versions/18/);
+      // assembly doesn't preserve MRJAR structure so the class is missing at runtime
+      MergeStrategy.discard
     case PathList("META-INF", "services", _*) =>
       MergeStrategy.filterDistinctLines
     case PathList("META-INF", "NOTICE") =>
@@ -242,7 +245,7 @@ lazy val assemblySettings = Seq(
       MergeStrategy.rename
     case PathList("NOTICE") =>
       MergeStrategy.rename
-    case PathList("META-INF", "maven" | "versions", _*) =>
+    case PathList("META-INF", "maven" | "versions" | "proguard", _*) =>
       MergeStrategy.discard
     case PathList("META-INF", x) if discardMeta(x) =>
       MergeStrategy.discard
