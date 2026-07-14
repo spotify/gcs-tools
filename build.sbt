@@ -13,7 +13,7 @@ val joptVersion = "5.0.4"
 val magnolifyVersion = "0.8.0"
 val parquetVersion = "1.17.1"
 val protobufGenericVersion = "0.2.9"
-val protobufVersion = "4.35.0"
+val protobufVersion = "4.35.1"
 val scalatestVersion = "3.2.19"
 val slf4jReload4jVersion2 = "2.0.17"
 
@@ -241,7 +241,10 @@ lazy val assemblySettings = Seq(
     case PathList("META-INF", "NOTICE") =>
       // avro-tools META-INF/NOTICE must not be renamed
       CustomMergeStrategy.rename(preserveName("avro-tools"))
-    case PathList("META-INF", "NOTICE.txt" | "NOTICE.markdown" | "FastDoubleParser-NOTICE" | "FastDoubleParser-LICENSE") =>
+    case PathList(
+          "META-INF",
+          "NOTICE.txt" | "NOTICE.markdown" | "FastDoubleParser-NOTICE" | "FastDoubleParser-LICENSE"
+        ) =>
       MergeStrategy.rename
     case PathList("NOTICE") =>
       MergeStrategy.rename
