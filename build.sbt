@@ -8,7 +8,7 @@ val avroVersion = "1.12.0"
 val gcsConnectorVersion = "3.1.17"
 val guavaVersion = "33.4.8-jre" // otherwise android is taken
 val hadoopVersion = "3.4.3"
-val jacksonVersion = "2.19.0"
+val jacksonVersion = "2.19.4"
 val joptVersion = "5.0.4"
 val magnolifyVersion = "0.8.0"
 val parquetVersion = "1.17.1"
@@ -241,7 +241,10 @@ lazy val assemblySettings = Seq(
     case PathList("META-INF", "NOTICE") =>
       // avro-tools META-INF/NOTICE must not be renamed
       CustomMergeStrategy.rename(preserveName("avro-tools"))
-    case PathList("META-INF", "NOTICE.txt" | "NOTICE.markdown" | "FastDoubleParser-NOTICE" | "FastDoubleParser-LICENSE") =>
+    case PathList(
+          "META-INF",
+          "NOTICE.txt" | "NOTICE.markdown" | "FastDoubleParser-NOTICE" | "FastDoubleParser-LICENSE"
+        ) =>
       MergeStrategy.rename
     case PathList("NOTICE") =>
       MergeStrategy.rename
