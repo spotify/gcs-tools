@@ -34,7 +34,7 @@ lazy val protobufSettings = Seq(Compile, Test)
   .flatMap(c => inConfig(c)(protobufConfigSettings))
 
 val commonSettings = Seq(
-  scalaVersion := "2.13.16",
+  scalaVersion := "2.13.18",
   javacOptions ++= Seq("--release", "11"),
   fork := true,
   Test / outputStrategy := Some(OutputStrategy.StdoutOutput)
@@ -241,7 +241,10 @@ lazy val assemblySettings = Seq(
     case PathList("META-INF", "NOTICE") =>
       // avro-tools META-INF/NOTICE must not be renamed
       CustomMergeStrategy.rename(preserveName("avro-tools"))
-    case PathList("META-INF", "NOTICE.txt" | "NOTICE.markdown" | "FastDoubleParser-NOTICE" | "FastDoubleParser-LICENSE") =>
+    case PathList(
+          "META-INF",
+          "NOTICE.txt" | "NOTICE.markdown" | "FastDoubleParser-NOTICE" | "FastDoubleParser-LICENSE"
+        ) =>
       MergeStrategy.rename
     case PathList("NOTICE") =>
       MergeStrategy.rename
